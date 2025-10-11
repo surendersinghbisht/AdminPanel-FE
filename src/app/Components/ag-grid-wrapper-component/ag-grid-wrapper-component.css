@@ -1,0 +1,145 @@
+.users-container {
+    background-color: #f9fafc;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    font-family: 'Inter', sans-serif;
+    min-height: calc(100vh - 80px);
+    box-sizing: border-box;
+  }
+  
+  .users-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .users-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+  }
+  
+  .button-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .btn-add-user {
+    background-color: #1a73e8;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: 0 2px 5px rgba(26,115,232,0.3);
+    transition: all 0.25s ease;
+  }
+  
+  .btn-add-user:hover {
+    background-color: #155ab6;
+    box-shadow: 0 3px 8px rgba(26,115,232,0.4);
+  }
+  
+  .btn-export {
+    background-color: #34a853;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(52,168,83,0.3);
+    transition: all 0.25s ease;
+  }
+  
+  .btn-export:hover {
+    background-color: #2d8645;
+    box-shadow: 0 3px 8px rgba(52,168,83,0.4);
+  }
+  
+  /* Wrapper for responsive height */
+  .grid-wrapper {
+    width: 100%;
+    height: calc(100vh - 220px);
+    min-height: 400px;
+  }
+  
+  /* AG Grid styling */
+  :host ::ng-deep .ag-theme-alpine.custom-ag-grid {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    border: 1px solid #dce1eb;
+    --ag-header-background-color: #1abc9c;
+    --ag-header-foreground-color: white;
+    --ag-header-height: 45px;
+    --ag-font-family: 'Inter', sans-serif;
+    --ag-font-size: 14px;
+    --ag-row-hover-color: #e8f0fe;
+    --ag-odd-row-background-color: #f5f7fa;
+  }
+  
+  :host ::ng-deep .ag-theme-alpine.custom-ag-grid .ag-header-cell-label {
+    justify-content: center;
+    font-weight: 600;
+  }
+  
+  :host ::ng-deep .ag-theme-alpine.custom-ag-grid .ag-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  :host ::ng-deep .ag-paging-panel {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  @media (max-width: 600px) {
+    .users-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .button-group {
+      flex-direction: column;
+      width: 100%;
+    }
+  
+    .btn-add-user,
+    .btn-export {
+      width: 100%;
+      text-align: center;
+      padding: 12px 0;
+      font-size: 16px;
+    }
+  
+    .users-title {
+      text-align: center;
+      width: 100%;
+      font-size: 20px;
+    }
+  
+    .grid-wrapper {
+      height: 300px;
+    }
+  
+    :host ::ng-deep .ag-paging-panel {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+    }
+  
+    :host ::ng-deep .ag-paging-button {
+      margin: 4px 0;
+    }
+  }
+  

@@ -1,0 +1,92 @@
+<app-loader [loading]="isLoading"></app-loader>
+
+<div class="container">
+  <h1 class="title">{{isEditMode ? 'Edit Role' : 'Add New Role'}}</h1>
+
+  <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+
+    <!-- Role Name -->
+    <div class="form-group">
+      <label for="roleName">Role Name *</label>
+      <input id="roleName" formControlName="roleName" type="text" class="form-control" placeholder="Enter role name">
+      <div *ngIf="roleForm.get('roleName')?.invalid && roleForm.get('roleName')?.touched" class="text-danger">
+        Role Name is required.
+      </div>
+    </div>
+
+    <!-- Short Description -->
+    <div class="form-group">
+      <label for="shortDescription">Short Description *</label>
+      <input id="shortDescription" formControlName="shortDescription" type="text" class="form-control" placeholder="Enter short description">
+      <div *ngIf="roleForm.get('shortDescription')?.invalid && roleForm.get('shortDescription')?.touched" class="text-danger">
+        Short Description is required.
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="form-group">
+      <label for="status">Status *</label>
+      <select id="status" formControlName="status" class="form-control">
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+
+    <!-- Select/Unselect All Buttons -->
+    <div class="select-buttons">
+      <button type="button" class="btn btn-select-all" (click)="selectAllPermissions()">Select All</button>
+      <button type="button" class="btn btn-unselect-all" (click)="unselectAllPermissions()">Unselect All</button>
+    </div>
+
+    <!-- Permissions -->
+    <div class="permissions-section" formArrayName="permissions">
+      <h3>Permissions</h3>
+
+      <div *ngFor="let perm of permissionsArray.controls; let i = index" [formGroupName]="i" class="permission-card">
+
+        <div class="permission-header" (click)="toggleExpand(i)">
+          <div>{{ perm.get('permissionName')?.value }}</div>
+
+          
+          <span class="toggle-icon">{{ expandedPermissions.has(i) ? '−' : '+' }}</span>
+        </div>
+
+        <div class="permission-options" *ngIf="expandedPermissions.has(i)">
+          <div class="toggle-group">
+            <div class="toggle-item">
+              <label class="switch">
+                <input type="checkbox" formControlName="list">
+                <span class="slider"></span>
+              </label>
+              <span class="toggle-label">List</span>
+            </div>
+            <div class="toggle-item">
+              <label class="switch">
+                <input type="checkbox" formControlName="add">
+                <span class="slider"></span>
+              </label>
+              <span class="toggle-label">Add</span>
+            </div>
+            <div class="toggle-item">
+              <label class="switch">
+                <input type="checkbox" formControlName="edit">
+                <span class="slider"></span>
+              </label>
+              <span class="toggle-label">Edit</span>
+            </div>
+            <div class="toggle-item">
+              <label class="switch">
+                <input type="checkbox" formControlName="delete">
+                <span class="slider"></span>
+              </label>
+              <span class="toggle-label">Delete</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <button type="submit" class="btn-submit" [disabled]="roleForm.invalid">{{isEditMode ? 'Update Role' : 'Add Role'}}</button>
+  </form>
+</div>

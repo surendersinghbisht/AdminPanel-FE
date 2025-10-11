@@ -1,0 +1,26 @@
+<div class="users-container">
+    <div class="users-header" *ngIf="showExport || showAddButton || title">
+      <h2 class="users-title" *ngIf="title">{{ title }}</h2>
+      <div class="button-group">
+        <a *ngIf="showAddButton" class="btn-add-user" (click)="onAddClick()">+ Add</a>
+        <button *ngIf="showExport" class="btn-export" (click)="exportCsv()">⬇ Export CSV</button>
+      </div>
+    </div>
+  
+    <div class="grid-wrapper">
+      <ag-grid-angular
+        class="ag-theme-alpine custom-ag-grid"
+        [rowData]="rowData"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="{ flex: 1, resizable: true, sortable: true, filter: true }"
+        [context]="{ componentParent: this }"
+        [pagination]="pagination"
+        [paginationPageSize]="pageSize"
+        [rowHeight]="rowHeight"
+        [animateRows]="true"
+        [theme]="'legacy'"
+        (gridReady)="onGridReady($event)">
+      </ag-grid-angular>
+    </div>
+  </div>
+  

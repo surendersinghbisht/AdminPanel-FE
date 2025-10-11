@@ -1,0 +1,489 @@
+/* Form Container Styles */
+.form-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 40px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 10px 20px rgba(0, 0, 0, 0.06);
+  }
+  
+  .form-header {
+    margin-bottom: 32px;
+    text-align: center;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 20px;
+  }
+  
+  .form-header h2 {
+    margin: 0 0 8px 0;
+    font-size: 28px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+  }
+  
+  .form-subtitle {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  
+  /* Form Layout */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+  }
+  
+  /* Labels */
+  .form-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
+  }
+  
+  .required {
+    color: #dc3545;
+    font-weight: 600;
+  }
+  
+  /* Form Controls */
+  .form-control {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 15px;
+    color: #333;
+    background-color: #ffffff;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    outline: none;
+    font-family: inherit;
+  }
+  
+  .form-control:hover {
+    border-color: #9ca3af;
+  }
+  
+  .form-control:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  .form-control::placeholder {
+    color: #9ca3af;
+  }
+  
+  /* Select Dropdown Styling */
+  select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+  
+  select.form-control option {
+    padding: 10px;
+  }
+  
+  /* Date Input */
+  input[type="date"].form-control {
+    cursor: pointer;
+  }
+  
+  input[type="date"].form-control::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  
+  input[type="date"].form-control::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+  }
+  
+  /* Invalid State */
+  .form-control.is-invalid {
+    border-color: #dc3545;
+    background-color: #fff5f5;
+  }
+  
+  .form-control.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+  }
+  
+  .invalid-feedback {
+    display: none;
+    color: #dc3545;
+    font-size: 13px;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+  
+  .form-control.is-invalid ~ .invalid-feedback {
+    display: block;
+  }
+  
+  .invalid-feedback small {
+    display: block;
+    margin-bottom: 2px;
+  }
+  
+  /* File Upload Styles */
+  .file-input-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  
+  .file-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #3b82f6;
+    background-color: #eff6ff;
+    border: 1.5px dashed #3b82f6;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    justify-content: center;
+    margin-top: 4px;
+  }
+  
+  .file-upload-btn:hover {
+    background-color: #dbeafe;
+    border-color: #2563eb;
+    color: #2563eb;
+  }
+  
+  .file-upload-btn svg {
+    flex-shrink: 0;
+  }
+  
+  /* Photo Preview */
+  .photo-preview-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-top: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #e5e7eb;
+  }
+  
+  .photo-preview {
+    display: block;
+    max-width: 200px;
+    height: auto;
+    border-radius: 6px;
+  }
+  
+  .remove-photo {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(220, 53, 69, 0.9);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+  }
+  
+  .remove-photo:hover {
+    background-color: #dc3545;
+    transform: scale(1.1);
+  }
+  
+  /* Buttons */
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    justify-content: flex-end;
+  }
+  
+  .btn {
+    padding: 12px 32px;
+    font-size: 15px;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    min-width: 140px;
+  }
+  
+  .btn-primary {
+    background-color: #3b82f6;
+    color: white;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+  }
+  
+  .btn-primary:hover:not(:disabled) {
+    background-color: #2563eb;
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+    transform: translateY(-1px);
+  }
+  
+  .btn-primary:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  .btn-primary:disabled {
+    background-color: #93c5fd;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  
+  .btn-secondary {
+    background-color: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #e5e7eb;
+    border-color: #9ca3af;
+  }
+  
+  /* Loading Spinner */
+  .spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  /* Phone Input Customization */
+  ::ng-deep .iti {
+    width: 100%;
+    display: block;
+  }
+  
+  ::ng-deep .iti__flag-container {
+    border-radius: 8px 0 0 8px;
+    background-color: #f9fafb;
+  }
+  
+  ::ng-deep .iti__selected-flag {
+    padding: 12px 12px;
+    border-radius: 8px 0 0 8px;
+    background-color: transparent;
+  }
+  
+  ::ng-deep .iti__arrow {
+    margin-left: 6px;
+  }
+  
+  ::ng-deep ngx-intl-tel-input .iti__country-list {
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  ::ng-deep ngx-intl-tel-input input {
+    padding: 12px 16px 12px 80px !important;
+    font-size: 15px !important;
+    border: 1.5px solid #d1d5db !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+    width: 100% !important;
+    height: 48px !important;
+  }
+  
+  ::ng-deep ngx-intl-tel-input input:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+    outline: none !important;
+  }
+  
+  ::ng-deep ngx-intl-tel-input input::placeholder {
+    color: #9ca3af !important;
+    opacity: 1 !important;
+  }
+  
+  ::ng-deep .iti__selected-dial-code {
+    margin-left: 6px;
+    font-size: 15px;
+    color: #374151;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .form-container {
+      margin: 20px;
+      padding: 24px;
+    }
+  
+    .form-row {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  
+    .form-header h2 {
+      font-size: 24px;
+    }
+  
+    .btn {
+      width: 100%;
+    }
+  
+    .form-actions {
+      flex-direction: column-reverse;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .form-container {
+      margin: 10px;
+      padding: 20px;
+    }
+  
+    .form-header {
+      margin-bottom: 24px;
+    }
+  }
+
+  .iti {
+	display: block !important;
+	margin-bottom: 20px;
+}
+
+.iti .dropdown-menu.country-dropdown {
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	border-color: #c7cace;
+	margin-top: -1px;
+}
+
+.iti .iti__country-list {
+	box-shadow: none;
+	font-size: 14px;
+	margin-left: 0;
+	width: 244px;
+	max-height: 170px;
+}
+
+.iti__flag-container.open + input {
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+}
+
+.iti .search-container input {
+	font-size: 14px;
+	border-color: #c7cace;
+	border-radius: 0;
+	padding: 5px 10px;
+}
+
+.iti .search-container input:focus {
+	outline: none;
+}
+
+@media screen and (max-width: 479px) {
+	.iti .iti__country-list {
+		width: 88.3vw;
+	}
+}
+/* Input box styling */
+ngx-intl-tel-input.custom {
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  ngx-intl-tel-input.custom input {
+    padding: 10px 12px;
+    border: 1px solid #d1d5db; /* light gray border */
+    border-radius: 8px;
+    width: 100%;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  
+  ngx-intl-tel-input.custom input:focus {
+    border-color: #3b82f6; /* blue focus */
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  }
+  
+  /* Dropdown panel */
+  .ngx-intl-tel-input .ngx-intl-tel-input__dropdown {
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    font-size: 14px;
+  }
+  
+  /* Make country list scrollable */
+  .ngx-intl-tel-input .ngx-intl-tel-input__dropdown-list {
+    max-height: 200px; /* adjust height */
+    overflow-y: auto;
+  }
+  
+  /* Country item styling */
+  .ngx-intl-tel-input .ngx-intl-tel-input__dropdown-item {
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .ngx-intl-tel-input .ngx-intl-tel-input__dropdown-item:hover {
+    background-color: #f3f4f6; /* light hover */
+  }
+  
+  /* Selected country */
+  .ngx-intl-tel-input .ngx-intl-tel-input__dropdown-item.active {
+    background-color: #3b82f6;
+    color: white;
+  }
+  
+  /* Search box styling */
+  .ngx-intl-tel-input .ngx-intl-tel-input__search input {
+    width: 100%;
+    padding: 6px 10px;
+    margin: 5px 0;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+  }
+  

@@ -1,0 +1,11 @@
+<app-reusable-ag-grid
+  [rowData]="rowData"
+  [columnDefs]="columnDefs"
+  [title]="'Users'"
+  [showAddButton]="true"
+  [showExport]="true"
+  (addClicked)="onAddUser()"
+  (editRow)="onEdit($event)"
+  (deleteRow)="onDelete($event)">
+</app-reusable-ag-grid>
+

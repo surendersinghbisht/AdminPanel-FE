@@ -24,9 +24,13 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ]
+    "styles": [
+  "src/styles.css",
+ "node_modules/bootstrap/dist/css/bootstrap.min.css",
+  "node_modules/intl-tel-input/build/css/intlTelInput.css",
+    "node_modules/ag-grid-community/styles/ag-theme-alpine.css",
+      "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+]
           },
           "configurations": {
             "production": {
@@ -82,11 +86,18 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+ "node_modules/bootstrap/dist/css/bootstrap.min.css",
+  "node_modules/intl-tel-input/build/css/intlTelInput.css",
+   "node_modules/ag-grid-community/styles/ag-theme-alpine.css",
+     "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
             ]
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

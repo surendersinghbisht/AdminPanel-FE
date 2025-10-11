@@ -1,0 +1,379 @@
+/* ===== Page Wrapper ===== */
+.page-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== Form Container ===== */
+.form-container {
+  max-width: 900px;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Form Header ===== */
+.form-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 30px 40px;
+  text-align: center;
+  color: white;
+}
+
+.form-header h2 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.form-header .subtitle {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.95;
+  font-weight: 400;
+}
+
+/* ===== Form Sections ===== */
+form {
+  padding: 40px;
+}
+
+.form-section {
+  margin-bottom: 35px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 20px 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+}
+
+.section-title::before {
+  content: '';
+  width: 4px;
+  height: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  margin-right: 12px;
+  border-radius: 2px;
+}
+
+/* ===== Form Rows ===== */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-bottom: 20px;
+}
+
+/* ===== Form Groups ===== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  color: #2d3748;
+  background: #f7fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: 'Roboto', sans-serif;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  background: #ffffff;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-group input::placeholder {
+  color: #a0aec0;
+}
+
+.form-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234a5568' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+/* ===== Required Star ===== */
+.required {
+  color: #e53e3e;
+  margin-left: 3px;
+  font-weight: 700;
+}
+
+/* ===== Error Styling ===== */
+.error-input {
+  border-color: #fc8181 !important;
+  background: #fff5f5 !important;
+}
+
+.error-message {
+  margin-top: 6px;
+  display: block;
+}
+
+.error-message small {
+  color: #e53e3e;
+  font-size: 13px;
+  font-weight: 500;
+  display: block;
+  margin-top: 2px;
+}
+
+/* ===== Phone Input ===== */
+.phone-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #f7fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.phone-input-wrapper:focus-within {
+  background: #ffffff;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.phone-input-wrapper .country-code {
+  padding: 12px 14px;
+  background: #edf2f7;
+  font-weight: 600;
+  color: #4a5568;
+  border-right: 2px solid #e2e8f0;
+  font-size: 15px;
+}
+
+.phone-input-wrapper input {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding-left: 12px;
+}
+
+/* ===== File Upload ===== */
+.file-upload-wrapper {
+  position: relative;
+}
+
+.file-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.file-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  background: #f7fafc;
+  border: 2px dashed #cbd5e0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.file-label:hover {
+  background: #edf2f7;
+  border-color: #667eea;
+}
+
+.file-icon {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+.file-text {
+  font-weight: 600;
+}
+
+/* ===== Photo Preview ===== */
+.photo-preview {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.photo-preview img {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 3px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Form Actions ===== */
+.form-actions {
+  margin-top: 35px;
+  padding-top: 25px;
+  border-top: 2px solid #e2e8f0;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.btn-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-submit:disabled {
+  background: #cbd5e0;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.6;
+}
+
+.btn-icon {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* ===== Loading Spinner ===== */
+.btn-spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  .page-wrapper {
+    padding: 20px 15px;
+  }
+
+  .form-container {
+    border-radius: 12px;
+  }
+
+  .form-header {
+    padding: 25px 20px;
+  }
+
+  .form-header h2 {
+    font-size: 24px;
+  }
+
+  form {
+    padding: 25px 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .section-title {
+    font-size: 16px;
+  }
+
+  .btn-submit {
+    padding: 12px 20px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-header h2 {
+    font-size: 22px;
+  }
+
+  .form-header .subtitle {
+    font-size: 13px;
+  }
+
+  form {
+    padding: 20px 15px;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .phone-input-wrapper .country-code {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+}

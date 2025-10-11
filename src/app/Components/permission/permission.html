@@ -1,0 +1,15 @@
+<h1>asdsaasdsadd</h1>
+<div class="permissions-section">
+    <label>{{mainPermission.name}}</label>
+  
+    <div formArrayName="permissions">
+      <div *ngFor="let perm of permissionsFormArray.controls; let i = index" [formGroupName]="i" class="permission-row">
+        <span>{{ perm.get('permissionName')?.value }}</span>
+        <label><input type="checkbox" formControlName="list"> List</label>
+        <label><input type="checkbox" formControlName="add"> Add</label>
+        <label><input type="checkbox" formControlName="edit"> Edit</label>
+        <label><input type="checkbox" formControlName="delete"> Delete</label>
+      </div>
+    </div>
+  </div>
+  

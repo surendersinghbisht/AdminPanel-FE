@@ -1,0 +1,188 @@
+<app-loader [loading]="isLoading"></app-loader>
+<div class="form-container">
+  <div class="form-header">
+    <h2>{{isEditMode ? 'Edit User Details' : 'Add New User'}}</h2>
+    <p class="form-subtitle">{{isEditMode ? 'Edit User Details' : 'Fill in the details to create a new user account'}}</p>
+  </div>
+
+  <form [formGroup]="userForm" (ngSubmit)="submitForm()" autocomplete="off">
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="name">Name <span class="required">*</span></label>
+        <input 
+          type="text" 
+          id="name"
+          formControlName="name" 
+          placeholder="Enter full name"
+          class="form-control"
+          [class.is-invalid]="f['name'].invalid && (f['name'].dirty || f['name'].touched)"
+        />
+        <div class="invalid-feedback" *ngIf="f['name'].invalid && (f['name'].dirty || f['name'].touched)">
+          <small *ngIf="f['name'].errors?.['required']">Name is required.</small>
+          <small *ngIf="f['name'].errors?.['minlength']">Minimum 2 characters required.</small>
+          <small *ngIf="f['name'].errors?.['maxlength']">Maximum 50 characters allowed.</small>
+          <small *ngIf="f['name'].errors?.['pattern']">Only alphabets and spaces allowed.</small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email <span class="required">*</span></label>
+        <input 
+          type="email" 
+          id="email"
+          formControlName="email" 
+          placeholder="Enter email address"
+          class="form-control"
+          [class.is-invalid]="f['email'].invalid && (f['email'].dirty || f['email'].touched)"
+        />
+        <div class="invalid-feedback" *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)">
+          <small *ngIf="f['email'].errors?.['required']">Email is required.</small>
+          <small *ngIf="f['email'].errors?.['email']">Invalid email format.</small>
+          <small *ngIf="f['email'].errors?.['maxlength']">Maximum 100 characters allowed.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phone Number Section -->
+    <div class="form-group">
+      <label for="phone">Phone Number <span class="required">*</span></label>
+      <div class="phone-input-wrapper" 
+           [class.is-invalid]="f['phone'].invalid && (f['phone'].dirty || f['phone'].touched)">
+        <ngx-intl-tel-input
+          [preferredCountries]="preferredCountries"
+          [enableAutoCountrySelect]="true"
+          [enablePlaceholder]="true"
+          [searchCountryFlag]="true"
+          [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+          [selectFirstCountry]="false"
+          [selectedCountryISO]="CountryISO.India"
+          [maxLength]="10"
+          [phoneValidation]="true"
+          name="phone"
+          formControlName="phone">
+        </ngx-intl-tel-input>
+      </div>
+      <div class="invalid-feedback" *ngIf="f['phone'].invalid && (f['phone'].dirty || f['phone'].touched)">
+        <!-- <small *ngIf="f['phone'].errors?.['required']">Phone number is required.</small> -->
+        <small *ngIf="f['phone'].errors?.['invalidPhone']">Please enter a valid phone number.</small>
+      </div>
+           
+    </div>
+
+    <!-- Username -->
+    <div class="form-group">
+      <label for="username">Username <span class="required">*</span></label>
+      <input 
+        type="text" 
+        id="username"
+        formControlName="username" 
+        placeholder="Enter username"
+        class="form-control"
+        [class.is-invalid]="f['username'].invalid && (f['username'].dirty || f['username'].touched)"
+      />
+      <div class="invalid-feedback" *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched)">
+        <small *ngIf="f['username'].errors?.['required']">Username is required.</small>
+        <small *ngIf="f['username'].errors?.['minlength']">Minimum 4 characters required.</small>
+        <small *ngIf="f['username'].errors?.['maxlength']">Maximum 50 characters allowed.</small>
+        <small *ngIf="f['username'].errors?.['pattern']">Only alphanumeric characters allowed.</small>
+      </div>
+    </div>
+
+    <!-- DOB & Role Row -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="dob">Date of Birth <span class="required">*</span></label>
+        <input 
+          type="date" 
+          id="dob"
+          formControlName="dob" 
+          [max]="today"
+          class="form-control"
+          [class.is-invalid]="f['dob'].invalid && (f['dob'].dirty || f['dob'].touched)"
+        />
+        <div class="invalid-feedback" *ngIf="f['dob'].invalid && (f['dob'].dirty || f['dob'].touched)">
+          <small *ngIf="f['dob'].errors?.['required']">Date of birth is required.</small>
+          <small *ngIf="f['dob'].errors?.['futureDate']">Date cannot be in the future.</small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="role">Role <span class="required">*</span></label>
+        <select 
+          id="role"
+          formControlName="role"
+          class="form-control"
+          [class.is-invalid]="f['role'].invalid && (f['role'].dirty || f['role'].touched)"
+        >
+          <option value="" disabled selected>Select Role</option>
+          <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="f['role'].invalid && (f['role'].dirty || f['role'].touched)">
+          <small *ngIf="f['role'].errors?.['required']">Role is required.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Status -->
+    <div class="form-group">
+      <label for="isActive">Active Status <span class="required">*</span></label>
+      <select 
+        id="isActive"
+        formControlName="isActive"
+        class="form-control"
+      >
+        <option value="" disabled selected>Select Status</option>
+        <option [value]="true">Active</option>
+        <option [value]="false">Inactive</option>
+      </select>
+    </div>
+
+    <!-- Photo Upload -->
+    <div class="form-group">
+      <label>Profile Photo</label>
+      <input
+        type="file"
+        id="photo"
+        (change)="onPhotoChange($event)"
+        accept=".jpg,.jpeg,.png"
+        class="file-input-hidden"
+      />
+      
+      <label for="photo" class="file-upload-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        Choose Photo (JPG, JPEG, PNG)
+      </label>
+    
+      <div class="invalid-feedback" style="display: block;" *ngIf="photoError">{{ photoError }}</div>
+    
+      <div class="photo-preview-wrapper" *ngIf="photoPreview">
+        <img [src]="photoPreview" alt="Photo Preview" class="photo-preview" />
+        <button type="button" class="remove-photo" (click)="removePhoto()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="resetForm()">
+        Reset
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid || isLoading">
+        <span *ngIf="!isLoading">{{isEditMode ? "Update User": "Create User"}}</span>
+        <span *ngIf="isLoading">
+          <span class="spinner"></span>
+          {{isEditMode ? "Updating User": "Creating User"}}...
+        </span>
+      </button>
+    </div>
+  </form>
+</div>

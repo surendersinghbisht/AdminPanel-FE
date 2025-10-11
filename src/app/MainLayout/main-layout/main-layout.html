@@ -1,0 +1,76 @@
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <div class="sidebar" [ngClass]="{ 'active': sidebarVisible }">
+    <div class="logo">
+      <h2>Admin Panel</h2>
+    </div>
+
+    <div class="user-info">
+      <p class="user-name">{{ user.firstName }}</p>
+      <p class="user-role">Admin</p>
+    </div>
+
+    <nav class="nav">
+      <ul>
+        <li 
+          routerLink="/dashboard" 
+          routerLinkActive="active" 
+          (click)="closeSidebar()">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </li>
+        <li 
+          routerLink="/users" 
+          routerLinkActive="active" 
+          (click)="closeSidebar()">
+          <i class="fas fa-users"></i>
+          <span>Users</span>
+        </li>
+        <li 
+          routerLink="/roles" 
+          routerLinkActive="active" 
+          (click)="closeSidebar()">
+          <i class="fas fa-user-shield"></i>
+          <span>Roles</span>
+        </li>
+        <li 
+          routerLink="/cms" 
+          routerLinkActive="active" 
+          (click)="closeSidebar()">
+          <i class="fa-solid fa-newspaper"></i>
+          <span>CMS</span>
+        </li>
+        <li 
+        routerLink="/emial-templates" 
+        routerLinkActive="active" 
+        (click)="closeSidebar()">
+        <i class="fa-solid fa-envelope"></i>
+        <span>Email Templates</span>
+      </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div class="overlay" *ngIf="sidebarVisible" (click)="toggleSidebar()"></div>
+
+  <!-- Main content -->
+  <div class="main-content">
+    <button class="hamburger" (click)="toggleSidebar()">☰</button>
+    <div class="outlet">
+      <div class="profile-dropdown top-right">
+        <button class="profile-btn" (click)="toggleProfileMenu()">
+          <i class="fas fa-user-circle"></i>
+        </button>
+      
+        <div class="dropdown-menu" *ngIf="profileMenuVisible">
+          <a routerLink="/profile" (click)="closeProfileMenu()">Profile</a>
+          <a (click)="logout()">Logout</a>
+        </div>
+      </div>
+      
+      
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

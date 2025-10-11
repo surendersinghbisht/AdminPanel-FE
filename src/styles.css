@@ -1,1 +1,71 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+body {
+    font-family: 'Roboto', sans-serif;
+  }
+  
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* ✅ Snackbar Base */
+.mat-mdc-snack-bar-container {
+  background: none !important;
+  box-shadow: none !important;
+  border-radius: 8px !important;
+  animation: slideIn 0.3s ease-out;
+}
+
+/* ✅ Snackbar Surface (solid background, not transparent) */
+.mdc-snackbar__surface {
+  border-radius: 8px !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25) !important;
+  padding: 14px 20px !important;
+  color: white !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 300px;
+  font-weight: 500;
+}
+
+/* ✅ Success Snackbar */
+.success-snackbar .mdc-snackbar__surface {
+  background-color: #4caf50 !important; /* Solid green */
+}
+
+/* ✅ Error Snackbar */
+.error-snackbar .mdc-snackbar__surface {
+  background-color: #e53935 !important; /* Solid red */
+}
+
+/* ✅ Info Snackbar */
+.info-snackbar .mdc-snackbar__surface {
+  background-color: #1e88e5 !important; /* Solid blue */
+}
+
+/* ✅ Warning Snackbar */
+.warning-snackbar .mdc-snackbar__surface {
+  background-color: #fb8c00 !important; /* Solid orange */
+}
+
+/* ✅ Close Button */
+.mdc-button__label {
+  color: white !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ✅ Snackbar Slide Animation */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
