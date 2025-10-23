@@ -1,11 +1,11 @@
 <!-- HTML -->
-<app-loader *ngIf="isLoading"></app-loader>
+<app-loader [loading]="isLoading"></app-loader>
 
 <div class="dashboard-container">
   <div class="stats-grid">
     
     <!-- Users Card -->
-    <div class="stat-card" routerLink="/users">
+    <div class="stat-card" (click)="goToUsers()">
       <div class="card-header">
         <div class="card-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -17,11 +17,11 @@
         </div>
         <span class="card-label">Total Users</span>
       </div>
-      <div class="card-value">{{ users.length }}</div>
+      <div class="card-value">{{isLoading ? 'Loading...' : users.count }}</div>
     </div>
 
     <!-- Roles Card -->
-    <div class="stat-card" routerLink="/roles">
+    <div class="stat-card" (click)="goToRoles()">
       <div class="card-header">
         <div class="card-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -32,8 +32,9 @@
         </div>
         <span class="card-label">Total Roles</span>
       </div>
-      <div class="card-value">{{ roles.length }}</div>
+      <div class="card-value">{{isLoading ? 'Loading...' : roles.count }}</div>
     </div>
 
   </div>
+  <app-graph></app-graph>
 </div>

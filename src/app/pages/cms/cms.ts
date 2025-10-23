@@ -1,60 +1,137 @@
-import { Component, OnInit } from '@angular/core';
-import { ColDef } from 'ag-grid-community';
-import { ReusableAgGridComponent } from '../../Components/ag-grid-wrapper-component/ag-grid-wrapper-component';
-import { AgGridActionCellComponent } from '../../Components/ag-grid-component-cell';
-
-export const DUMMY_USERS = [
-  { userId: 1, name: 'John Doe', email: 'john.doe@example.com', phone: '+11234567890', username: 'johndoe', dob: '1990-05-12', role: 'Admin', isActive: true },
-  { userId: 2, name: 'Jane Smith', email: 'jane.smith@example.com', phone: '+441234567890', username: 'janesmith', dob: '1988-11-30', role: 'Editor', isActive: false },
-  { userId: 3, name: 'Michael Brown', email: 'michael.brown@example.com', phone: '+919876543210', username: 'michaelb', dob: '1995-07-22', role: 'Author', isActive: true }
-];
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Role, RoleService } from '../../services/RoleService';
+import { ColDef, GridReadyEvent, GridApi } from 'ag-grid-community';
+import { Router, RouterModule } from '@angular/router';
+import { AgGridAngular } from 'ag-grid-angular';
+import { LoaderComponent } from '../../Components/loader/loader';
+import { RouterLink } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CustomButtonComponent } from '../../Components/ActionRenderComponent';
+import { CustomActiveFilter } from '../../Components/CustomFilter';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../Components/Dialog';
+import { CmsService } from '../../services/CmsService';
+import { CommonModule } from '@angular/common';
+import { FloatingButtonComponent } from '../../component/FloatingButtonComponent';
+import { DataTableComponent } from '../../Components/datatable/datatable';
 
 @Component({
   selector: 'app-cms',
-  template: `
-    <app-reusable-ag-grid
-      [rowData]="rowData"
-      [columnDefs]="columnDefs"
-      (editRow)="onEdit($event)"
-      (deleteRow)="onDelete($event)"
-      [pagination]="true"
-      [pageSize]="10">
-    </app-reusable-ag-grid>
-  `,
-  standalone: true,
-  imports: [ReusableAgGridComponent, AgGridActionCellComponent]
+  imports: [AgGridAngular, LoaderComponent, RouterLink, RouterModule, CommonModule, DataTableComponent],
+  templateUrl: './cms.html',
+  styleUrl: './cms.css'
 })
 export class Cms implements OnInit {
-  rowData = DUMMY_USERS;
+    isLoading = false;
+    @ViewChild(DataTableComponent) dataTable!: DataTableComponent;
+  rowData: any[] = [];
+  gridApi!: GridApi;
+permissionToAdd = true;
+permissionToUpdate = true;
+permissionToDelete = true;
 
-  columnDefs: ColDef[] = [
-    { field: 'userId', headerName: 'ID' },
-    { field: 'name', headerName: 'Name' },
-    { field: 'email', headerName: 'Email' },
-    { field: 'phone', headerName: 'Phone' },
-    { field: 'username', headerName: 'Username' },
-    { field: 'dob', headerName: 'DOB' },
-    { field: 'role', headerName: 'Role' },
-    { field: 'isActive', headerName: 'Active' },
-    {
-      headerName: 'Actions',
-      field: 'actions',
-      cellRenderer: AgGridActionCellComponent,
-      cellRendererParams: {
-        editClicked: (data: any) => this.onEdit(data),
-        deleteClicked: (data: any) => this.onDelete(data)
-      },
-      width: 100
+  constructor(
+    private cmsService: CmsService,
+    private cd: ChangeDetectorRef,
+    private snackBar: MatSnackBar,
+    private router: Router,
+    private dialog: MatDialog
+  ) {}
+
+ 
+   showSnack(message: string, type: 'success' | 'error' | 'delete') {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      panelClass: [`${type}-snackbar`]
+    });
+  }
+
+  ngOnInit(): void {
+        const permissions =JSON.parse(localStorage.getItem('rolesWithPermissions') || '[]');
+permissions.forEach((perm: any) => {
+  if(perm.permissionName === 'Cms'){
+    this.permissionToAdd = perm.canCreate;
+    this.permissionToUpdate = perm.canUpdate;
+    this.permissionToDelete = perm.canDelete;
+  }
+}
+)
+  }
+handleExport() {
+}
+handleAdd() {
+  this.router.navigate(['/add-cms']);
+}
+
+handleActiveChange(event: {row: any, isActive: boolean}) {
+  console.log('event',event)
+    let payload = {
+      id: event.row.id,
+      isActive: event.isActive
     }
-  ];
+    console.log('payload',payload)
+  this.cmsService.updateActiveStatus(payload).subscribe({
+    next: () => {
+     this.dataTable.reloadTable(()=>{
+    this.showSnack('Status Updated Successfully', 'success');
 
-  ngOnInit(): void {}
+     });
+    
+    },
+            error: (err: any) => {
+              console.error('CMS update error:', err);
+              this.showSnack('Error updating CMS', 'error');
 
-  onEdit(data: any) {
-    console.log('Edit clicked:', data);
-  }
+            }
+  });
 
-  onDelete(data: any) {
-    console.log('Delete clicked:', data);
-  }
+}
+
+handleDelete(row: any) {
+   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          title: 'Delete CMS',
+          message: 'Are you sure you want to delete this CMS?',
+          confirmText: 'Delete',
+          cancelText: 'Cancel'
+        }
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.cmsService.deleteCms(row.id).subscribe({
+            next: () => {
+              this.dataTable.reloadTable(()=>{
+              this.showSnack('CMS Deleted Successfully', 'success');
+              });
+
+            },
+            error: (err: any) => {
+              console.error('CMS delete error:', err);
+              this.showSnack('Error deleting CMS', 'error');
+
+            }
+          });
+        }
+      });
+  console.log('Delete:', row);
+}
+handleEdit(row: any) {
+this.router.navigate([`edit-cms/${row.id}`]);
+}
+
+
+
+   columns = [
+  // { title: 'ID', data: 'userId' },
+  { title: 'Key', data: 'key' },
+  { title: 'Title', data: 'title' },
+  { title: 'Short Description', data: 'description' },
+
+];
+
+fetchcms =(params:any) => this.cmsService.getcmss(params);
+
+
 }

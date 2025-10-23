@@ -1,11 +1,20 @@
-<app-reusable-ag-grid
-  [rowData]="rowData"
-  [columnDefs]="columnDefs"
-  [title]="'Users'"
-  [showAddButton]="true"
-  [showExport]="true"
-  (addClicked)="onAddUser()"
-  (editRow)="onEdit($event)"
-  (deleteRow)="onDelete($event)">
-</app-reusable-ag-grid>
-
+<app-data-table
+  [title]="'CMS'"
+  [addButtonText] = "'Add CMS'"
+  [exportButtonText] = "'Export CSV'"
+  [columns]="columns"
+  [fetchDataFn]="fetchcms.bind(this)"
+  [enableActions]="true"
+  [permissionToDelete] = "permissionToDelete"
+  [permissionToAdd]="permissionToAdd"
+  [permissionToUpdate]="permissionToUpdate"
+  [enableIsActive]="permissionToUpdate"
+  [enableEdit]="permissionToUpdate"
+  [enableDelete]="permissionToDelete"
+  [enableExport]="true"
+  (onEdit)="handleEdit($event)"
+  (onDelete)="handleDelete($event)"
+  (onActiveChange)="handleActiveChange($event)"
+  (onAdd)="handleAdd()"
+  (onExport)="handleExport()">
+</app-data-table>

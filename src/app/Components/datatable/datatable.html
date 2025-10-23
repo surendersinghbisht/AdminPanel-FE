@@ -1,0 +1,71 @@
+<!-- Angular Template -->
+<app-loader [loading]="isLoading"></app-loader>
+
+<div class="datatable-container bg-white p-4 rounded shadow-sm">
+  <div class="page-header mb-3">
+    <div class="header-content">
+      <h2 class="table-title">
+        {{ title }}
+      </h2>
+      <p class="table-subtitle" *ngIf="subtitle">{{ subtitle }}</p>
+    </div>
+  </div>
+
+  <!-- Buttons aligned to right -->
+  <div class="table-controls mb-3 d-flex justify-content-end gap-2 flex-wrap">
+    <button *ngIf="permissionToAdd" class="btn btn-outline-dark bg-white" (click)="addAction()">
+      <i class="fas fa-plus"></i> {{ addButtonText }}
+    </button>
+
+    <button *ngIf="enableExport" class="btn btn-outline-dark bg-white" (click)="exportAction()">
+      <i class="fas fa-file-export"></i> {{ exportButtonText }}
+    </button>
+  </div>
+
+  <div class="table-wrapper bg-white p-3 rounded border">
+    <table id="reusableDataTable" class="table table-hover table-bordered mb-0 align-middle" style="width:100%">
+      <thead style="background-color: white;">
+        <!-- Header Row (centered) -->
+        <tr>
+          <th style="display:none;">ID</th> 
+          <th *ngFor="let col of columns" class="text-center align-middle">{{ col.title }}</th>
+          <th *ngIf="enableIsActive" class="text-center align-middle" style="width: 100px;">Is Active?</th>
+          <th class="text-center align-middle" style="width: 140px;">Actions</th>
+        </tr>
+
+        <!-- Filter Row -->
+       <!-- Filter Row -->
+<tr>
+  <th style="display:none;"></th>
+  <th *ngFor="let col of columns">
+    <!-- If column is timestamp, show date picker -->
+    <ng-container *ngIf="col.data === 'timeStamp'; else normalInput">
+      <input type="date" class="form-control form-control-sm timestamp-filter">
+    </ng-container>
+
+    <ng-template #normalInput>
+      <input type="text" class="form-control form-control-sm">
+    </ng-template>
+  </th>
+
+  <th *ngIf="enableIsActive">
+    <select class="form-control form-control-sm">
+      <option value="">All</option>
+      <option value="true">Active</option>
+      <option value="false">Inactive</option>
+    </select>
+  </th>
+
+  <th class="text-center" style="width: 140px;">
+    <button class="btn btn-sm btn-outline-secondary clear-all-filters" title="Clear Filters">
+      <i class="fas fa-times"></i>
+    </button>
+  </th>
+</tr>
+
+      </thead>
+
+      <tbody></tbody>
+    </table>
+  </div>
+</div>

@@ -1,7 +1,8 @@
 /* Form Container Styles */
 .form-container {
-    max-width: 800px;
-    margin: auto;
+    max-width: none; /* Remove max-width restriction */
+    width: 95%; /* Take 95% of screen width */
+    margin: 40px auto; /* Add vertical margin */
     padding: 40px;
     background: #ffffff;
     border-radius: 12px;
@@ -296,9 +297,10 @@
     to { transform: rotate(360deg); }
   }
   
-  /* Phone Input Customization */
+  /* Phone Input Customization - REDUCED WIDTH */
   ::ng-deep .iti {
     width: 100%;
+    max-width: 280px; /* Limit the width */
     display: block;
   }
   
@@ -308,28 +310,35 @@
   }
   
   ::ng-deep .iti__selected-flag {
-    padding: 12px 12px;
+    padding: 12px 8px;
     border-radius: 8px 0 0 8px;
     background-color: transparent;
   }
   
   ::ng-deep .iti__arrow {
-    margin-left: 6px;
+    margin-left: 4px;
   }
   
   ::ng-deep ngx-intl-tel-input .iti__country-list {
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 280px;
   }
   
   ::ng-deep ngx-intl-tel-input input {
-    padding: 12px 16px 12px 80px !important;
+    padding: 12px 12px 12px 70px !important;
     font-size: 15px !important;
     border: 1.5px solid #d1d5db !important;
     border-radius: 8px !important;
     transition: all 0.2s ease !important;
     width: 100% !important;
+    max-width: 280px !important; /* Limit input width */
     height: 48px !important;
+    background-color: #ffffff !important;
+  }
+
+  ::ng-deep ngx-intl-tel-input input:hover {
+    border-color: #9ca3af !important;
   }
   
   ::ng-deep ngx-intl-tel-input input:focus {
@@ -342,18 +351,43 @@
     color: #9ca3af !important;
     opacity: 1 !important;
   }
+
+  /* Invalid State for Phone Input */
+  ::ng-deep ngx-intl-tel-input input.is-invalid {
+    border-color: #dc3545 !important;
+    background-color: #fff5f5 !important;
+  }
+
+  ::ng-deep ngx-intl-tel-input input.is-invalid:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1) !important;
+  }
+
+  /* Make sure invalid feedback shows for phone */
+  .form-group:has(ngx-intl-tel-input) .invalid-feedback {
+    display: none;
+    color: #dc3545;
+    font-size: 13px;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  .form-group:has(ngx-intl-tel-input .is-invalid) .invalid-feedback {
+    display: block;
+  }
   
   ::ng-deep .iti__selected-dial-code {
-    margin-left: 6px;
-    font-size: 15px;
+    margin-left: 4px;
+    font-size: 14px;
     color: #374151;
   }
   
   /* Responsive Design */
   @media (max-width: 768px) {
     .form-container {
-      margin: 20px;
+      margin: 20px auto;
       padding: 24px;
+      width: 95%;
     }
   
     .form-row {
@@ -372,118 +406,81 @@
     .form-actions {
       flex-direction: column-reverse;
     }
+
+    /* Phone input full width on mobile */
+    ::ng-deep .iti {
+      max-width: 100%;
+    }
+
+    ::ng-deep ngx-intl-tel-input input {
+      max-width: 100% !important;
+    }
   }
   
   @media (max-width: 480px) {
     .form-container {
-      margin: 10px;
+      margin: 10px auto;
       padding: 20px;
+      width: 95%;
     }
-  
+
+       .coustom{
+      width: 100%;
+    }
+    
+   
     .form-header {
       margin-bottom: 24px;
     }
   }
 
   .iti {
-	display: block !important;
-	margin-bottom: 20px;
-}
-
-.iti .dropdown-menu.country-dropdown {
-	border-top-left-radius: 0px;
-	border-top-right-radius: 0px;
-	border-color: #c7cace;
-	margin-top: -1px;
-}
-
-.iti .iti__country-list {
-	box-shadow: none;
-	font-size: 14px;
-	margin-left: 0;
-	width: 244px;
-	max-height: 170px;
-}
-
-.iti__flag-container.open + input {
-	border-bottom-left-radius: 0px;
-	border-bottom-right-radius: 0px;
-}
-
-.iti .search-container input {
-	font-size: 14px;
-	border-color: #c7cace;
-	border-radius: 0;
-	padding: 5px 10px;
-}
-
-.iti .search-container input:focus {
-	outline: none;
-}
-
-@media screen and (max-width: 479px) {
-	.iti .iti__country-list {
-		width: 88.3vw;
-	}
-}
-/* Input box styling */
-ngx-intl-tel-input.custom {
-    width: 100%;
-    font-family: 'Inter', sans-serif;
+    display: block !important;
   }
-  
-  ngx-intl-tel-input.custom input {
-    padding: 10px 12px;
-    border: 1px solid #d1d5db; /* light gray border */
-    border-radius: 8px;
-    width: 100%;
+
+  .iti .dropdown-menu.country-dropdown {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-color: #c7cace;
+    margin-top: -1px;
+  }
+
+  .iti .iti__country-list {
+    box-shadow: none;
     font-size: 14px;
+    margin-left: 0;
+    width: 244px;
+    max-height: 170px;
+  }
+
+  .iti__flag-container.open + input {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
+  .iti .search-container input {
+    font-size: 14px;
+    border-color: #c7cace;
+    border-radius: 0;
+    padding: 5px 10px;
+  }
+
+  .iti .search-container input:focus {
     outline: none;
-    transition: border-color 0.2s;
   }
-  
-  ngx-intl-tel-input.custom input:focus {
-    border-color: #3b82f6; /* blue focus */
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+
+  @media screen and (max-width: 479px) {
+    .iti .iti__country-list {
+      width: 88.3vw;
+    }
   }
-  
-  /* Dropdown panel */
-  .ngx-intl-tel-input .ngx-intl-tel-input__dropdown {
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    font-size: 14px;
+  .coustom{
+    width: 50%;
   }
-  
-  /* Make country list scrollable */
-  .ngx-intl-tel-input .ngx-intl-tel-input__dropdown-list {
-    max-height: 200px; /* adjust height */
-    overflow-y: auto;
-  }
-  
-  /* Country item styling */
-  .ngx-intl-tel-input .ngx-intl-tel-input__dropdown-item {
-    padding: 6px 12px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .ngx-intl-tel-input .ngx-intl-tel-input__dropdown-item:hover {
-    background-color: #f3f4f6; /* light hover */
-  }
-  
-  /* Selected country */
-  .ngx-intl-tel-input .ngx-intl-tel-input__dropdown-item.active {
-    background-color: #3b82f6;
-    color: white;
-  }
-  
-  /* Search box styling */
-  .ngx-intl-tel-input .ngx-intl-tel-input__search input {
-    width: 100%;
-    padding: 6px 10px;
-    margin: 5px 0;
-    border-radius: 6px;
-    border: 1px solid #d1d5db;
-    font-size: 14px;
-  }
-  
+
+  /* Force display of phone error when needed */
+.invalid-feedback[style*="display: block"] {
+  display: block !important;
+}
+
+

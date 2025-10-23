@@ -1,0 +1,20 @@
+<app-data-table
+  [title]="'Email Templates'"
+  [addButtonText] = "'Add Email Template'"
+  [exportButtonText] = "'Export CSV'"
+  [columns]="columns"
+  [fetchDataFn]="fetchTemplates.bind(this)"
+  [enableActions]="true"
+  [permissionToDelete] = "permissionToDelete"
+  [permissionToAdd]="permissionToAdd"
+  [permissionToUpdate]="permissionToUpdate"
+  [enableIsActive]="permissionToUpdate"
+  [enableEdit]="permissionToUpdate"
+  [enableDelete]="permissionToDelete"
+  [enableExport]="true"
+  (onEdit)="handleEdit($event)"
+  (onDelete)="handleDelete($event)"
+  (onActiveChange)="handleActiveChange($event)"
+  (onAdd)="handleAdd()"
+  (onExport)="handleExport()">
+</app-data-table>

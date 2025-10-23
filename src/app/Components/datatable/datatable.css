@@ -1,0 +1,210 @@
+/* datatable.css */
+
+/* Button Hover Effects */
+.table-controls .btn:hover i {
+  color: #fff !important;
+}
+
+.table-controls .btn:hover {
+  background-color: #000 !important;
+  color: #fff !important;
+  border-color: #000 !important;
+  transition: all 0.3s ease;
+}
+
+/* Toggle Switch Styles */
+:host ::ng-deep .is-active-cell .form-check-input.active-toggle {
+    appearance: none !important; 
+    -webkit-appearance: none !important;
+    width: 2.5em !important;
+    height: 1.5em !important;
+    border-radius: 1.5em !important;
+    background-color: #e9ecef !important; 
+    border: 1px solid rgba(0, 0, 0, 0.25) !important;
+    cursor: pointer;
+    position: relative !important;
+    transition: background-color 0.3s;
+    background-image: none !important;
+}
+
+:host ::ng-deep .is-active-cell .form-check-input.active-toggle:checked {
+    background-color: #61B984 !important;
+    border-color: #61B984 !important;
+}
+
+:host ::ng-deep .is-active-cell .form-check-input.active-toggle::before {
+    content: '' !important;
+    position: absolute !important;
+    width: 1.2em !important; 
+    height: 1.2em !important; 
+    top: 0.15em !important; 
+    left: 0.15em !important;
+    background-color: white !important;
+    border-radius: 50% !important;
+    transition: transform 0.3s;
+}
+
+:host ::ng-deep .is-active-cell .form-check-input.active-toggle:checked::before {
+    transform: translateX(1.0em) !important;
+}
+
+:host ::ng-deep .is-active-cell .form-check-input.active-toggle:focus {
+    box-shadow: 0 0 0 0.25rem rgba(97, 185, 132, 0.25) !important; 
+    outline: 0 !important;
+}
+
+/* ✅ HORIZONTAL SCROLL FOR SMALL SCREENS */
+.table-wrapper {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+}
+
+/* TEXT WRAPPING FIX */
+:host ::ng-deep #reusableDataTable {
+  table-layout: fixed !important;
+  width: 100% !important;
+  min-width: 800px; /* Adjust based on your needs - prevents table from becoming too narrow */
+}
+
+:host ::ng-deep #reusableDataTable th,
+:host ::ng-deep #reusableDataTable td {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  vertical-align: top !important;
+  max-width: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Ensure DataTables doesn't override */
+:host ::ng-deep .dataTables_wrapper table.dataTable {
+  table-layout: fixed !important;
+}
+
+:host ::ng-deep .dataTables_wrapper table.dataTable td,
+:host ::ng-deep .dataTables_wrapper table.dataTable th {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+}
+
+/* Optional: Style the scrollbar */
+.table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* ===== RESPONSIVE HEADER SECTION ===== */
+.page-header {
+  margin-bottom: 1rem;
+}
+
+.header-content {
+  text-align: left;
+}
+
+.table-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+  word-wrap: break-word;
+}
+
+.table-subtitle {
+  color: #6c757d;
+  font-weight: 600;
+  margin-bottom: 0;
+  font-size: 0.95rem;
+  word-wrap: break-word;
+}
+
+/* Tablet (768px and below) */
+@media (max-width: 768px) {
+  .table-title {
+    font-size: 1.25rem;
+  }
+  
+  .table-subtitle {
+    font-size: 0.875rem;
+  }
+  
+  .datatable-container {
+    padding: 1rem !important;
+  }
+}
+
+/* Mobile (576px and below) */
+@media (max-width: 576px) {
+  .table-title {
+    font-size: 1.1rem;
+  }
+  
+  .table-subtitle {
+    font-size: 0.813rem;
+  }
+  
+  .page-header {
+    margin-bottom: 0.75rem;
+  }
+  
+  .datatable-container {
+    padding: 0.75rem !important;
+  }
+  
+  /* Stack buttons on very small screens */
+  .table-controls {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  
+  .table-controls .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Extra small (400px and below) */
+@media (max-width: 400px) {
+  .table-title {
+    font-size: 1rem;
+  }
+  
+  .table-subtitle {
+    font-size: 0.75rem;
+  }
+}
+
+/* Target Is Active column cells */
+:host ::ng-deep .is-active-column {
+  width: 220px !important;
+  max-width: 220px !important;
+}
+
+/* Darker border for column search inputs */
+table.dataTable thead tr:nth-child(2) .form-control.form-control-sm,
+table.dataTable thead tr:nth-child(2) select.form-control.form-control-sm {
+  border: 1px solid #555 !important;  /* darker border */
+  box-shadow: none !important;
+  color: #333;
+}
+
+table.dataTable thead tr:nth-child(2) .form-control.form-control-sm:focus,
+table.dataTable thead tr:nth-child(2) select.form-control.form-control-sm:focus {
+  border-color: #000 !important; /* darkest border when focused */
+  outline: none;
+}

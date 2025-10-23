@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BASE_URL } from "../../baseurl";
 import { Observable } from "rxjs";
+import { DataTableRequest, DataTableResponse, getAdminFromLocalHost } from "./AuthService";
 
 export interface Role {
  id:number
@@ -33,9 +34,15 @@ getAllPermissions(): Observable<any>{
     return this.http.get<any>(`${this.BaseUrl}/get-permissions`)
 }
 
-getAllRoles(): Observable<Role[]>{
-    return this.http.get<Role[]>(`${this.BaseUrl}/get-roles`)
-}
+
+ getRoles(request: DataTableRequest): Observable<DataTableResponse<Role>> {
+  console.log('roles asd',request)
+    return this.http.post<DataTableResponse<Role>>(`${this.BaseUrl}/get-roles`, request);
+  }
+
+  getRolesWithPermissions(roleName: string): Observable<any>{
+    return this.http.get<any>(`${this.BaseUrl}/role-data/${roleName}`)
+  }
 
 addRole(data: any):Observable<any>{
 console.log(data);
@@ -54,6 +61,8 @@ shortDescription: data.shortDescription,
 isActive: data.status === true || data.status === 'active',
 permissions: perArr
     }
+    var admin = getAdminFromLocalHost();
+payload.AdminName = admin.firstName;
     console.log('payload',payload)
     return this.http.post<any>(`${this.BaseUrl}/add-role`, payload)
 }
@@ -63,8 +72,13 @@ updateRoleActiveStatus(payload:any):Observable<any>{
     return this.http.post<any>(`${this.BaseUrl}/update-role-status`, payload);
 }
 
-deleteRole(roleId: number):Observable<any>{
-    return this.http.delete<any>(`${this.BaseUrl}/delete-role/${roleId}`);
+deleteRole(roleId: number):Observable<any>{ 
+    let admin = getAdminFromLocalHost();
+    let payload = {
+        Id: roleId,
+        adminName: admin.name
+    }
+    return this.http.post<any>(`${this.BaseUrl}/delete-role`,payload);
 }
 
 getRoleDetail(roleId: number):Observable<any>{
@@ -88,8 +102,19 @@ updateRole(data: any, roleId: number):Observable<any>{
     isActive: data.status === true || data.status === 'active',
     permissions: perArr
         }
+        var admin = getAdminFromLocalHost();
+payload.AdminName = admin.firstName;
         console.log('payload',payload)
         return this.http.post<any>(`${this.BaseUrl}/update-role`, payload)
     }
+
+
+    getRolesCount() {
+  return this.http.get<number>(`${this.BaseUrl}/count`);
+}
+
+getAllRoleNames(){
+    return this.http.get<any>(`${this.BaseUrl}/get-role-name`)
+}
 
 }

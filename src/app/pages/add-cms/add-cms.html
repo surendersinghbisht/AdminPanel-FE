@@ -1,0 +1,103 @@
+<div class="email-editor-container">
+<app-loader [loading]="isLoading"></app-loader>
+
+  <h2 class="editor-title">{{isEditMode ? 'Edit' : 'Add New'}} CMS</h2>
+
+  <form [formGroup]="emailForm" class="email-form">
+    
+    <div class="form-row">
+     <div class="form-group">
+  <label for="key">
+    Key <span class="required">*</span>
+    <span class="hint">(2–10 characters)</span>
+  </label>
+  <input 
+    type="text"
+    id="key"
+    autocomplete="off" 
+    formControlName="key"
+    placeholder="e.g., WLC001"
+    class="form-input"
+    [disabled]="isEditMode"
+    maxlength="10"
+    [class.invalid]="emailForm.get('key')?.invalid && emailForm.get('key')?.touched"
+  >
+  <span class="error-message" *ngIf="emailForm.get('key')?.invalid && emailForm.get('key')?.touched">
+    {{ getErrorMessage('key') }}
+  </span>
+</div>
+
+
+      <div class="form-group">
+        <label for="title">Title <span class="required">*</span></label>
+        <input 
+          id="title" 
+          autocomplete="off"  
+          formControlName="title" 
+          type="text" 
+          class="form-input" 
+          placeholder="e.g., Welcome Template"
+          maxlength="50"
+          [class.invalid]="emailForm.get('title')?.invalid && emailForm.get('title')?.touched"
+        >
+        <span class="error-message" *ngIf="emailForm.get('title')?.invalid && emailForm.get('title')?.touched">
+          {{ getErrorMessage('title') }}
+        </span>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="description">Short Description <span class="required">*</span></label>
+        <input 
+          id="description" 
+          autocomplete="off" 
+          formControlName="description" 
+          type="text" 
+          class="form-input" 
+          placeholder="e.g., Welcome to our platform"
+          maxlength="100"
+          [class.invalid]="emailForm.get('description')?.invalid && emailForm.get('description')?.touched"
+        >
+        <span class="error-message" *ngIf="emailForm.get('description')?.invalid && emailForm.get('description')?.touched">
+          {{ getErrorMessage('description') }}
+        </span>
+      </div>
+
+
+      <div class="form-group">
+        <label for="isActive">Status <span class="required">*</span></label>
+        <select id="isActive" formControlName="isActive" class="form-input">
+          <option [ngValue]="true">Active</option>
+          <option [ngValue]="false">Inactive</option>
+        </select>
+      </div>
+    </div>
+
+
+    <!-- CKEditor -->
+    <div class="form-group editor-group">
+      <label>Message Content <span class="required">*</span></label>
+      <ckeditor [editor]="Editor" [config]="config" [(ngModel)]="editorData" [ngModelOptions]="{standalone: true}"
+                (ready)="onEditorReady($event)" (change)="onEditorChange()"></ckeditor>
+
+      <div class="word-count">Words: {{ wordCount }} | Characters: {{ characterCount }}</div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="action-buttons">
+      <button type="button" (click)="clearForm()" class="cancel-btn" routerLink="/cms"> Cancel</button>
+
+      <button type="button" [disabled]="emailForm.invalid || isLoading" (click)="saveEmail()" class="submit-button">
+        <span *ngIf="!isLoading">{{isEditMode ? 'Update' : 'Save'}} CMS</span>
+        <span *ngIf="isLoading">⏳ Saving...</span>
+      </button>
+
+      <!-- <button type="button" [disabled]="emailForm.invalid || isLoading" (click)="saveAsDraft()" class="btn btn-secondary">💾 Save Draft</button>
+      <button type="button" (click)="loadDraft()" class="btn btn-secondary">📂 Load Draft</button> -->
+      <!-- <button type="button" (click)="clearForm()" class="btn btn-warning">Clear Form</button> -->
+
+    </div>
+  </form>
+ 
+</div>

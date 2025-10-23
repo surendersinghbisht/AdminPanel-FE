@@ -1,32 +1,44 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/AuthService';
 import { SnackbarComponent } from '../../Components/snackbar/snackbar';
 import { LoaderComponent } from '../../Components/loader/loader';
+import { CommonModule } from '@angular/common';
 
-declare var grecaptcha: any;
+declare global {
+  interface Window {
+    turnstile: any;
+  }
+}
 
 @Component({
   selector: 'app-login',
+  imports: [ReactiveFormsModule, CommonModule, LoaderComponent, SnackbarComponent, RouterModule],
   templateUrl: './login.html',
-  styleUrls: ['./login.css'],
-  standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, SnackbarComponent, LoaderComponent]
+  styleUrls: ['./login.css']
 })
 export class Login implements OnInit, AfterViewInit {
   loginForm!: FormGroup;
-  recaptchaToken: string | null = null;
-  recaptchaError = false;
-  serverError = '';
+  turnstileToken: string | null = null;
+  turnstileWidgetId: string | null = null;
   isLoading = false;
+  turnstileError = false;
+  // Add this property to your component class
+showPassword = false;
+
+// Add this method
+togglePasswordVisibility(): void {
+  this.showPassword = !this.showPassword;
+}
+
   @ViewChild(SnackbarComponent) snackbar!: SnackbarComponent;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -40,49 +52,106 @@ export class Login implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    grecaptcha.render('recaptcha', {
-      sitekey: '6LcnveIrAAAAAPI8cFz6oQMgSVu2-4Wb6kgtCvOQ',
-      callback: (token: string) => {
-        this.recaptchaToken = token;
-        this.recaptchaError = false;
-      },
-      'expired-callback': () => {
-        this.recaptchaToken = null;
-      }
-    });
+    this.initializeTurnstile();
   }
 
-  get email() { return this.loginForm.get('email'); }
-  get password() { return this.loginForm.get('password'); }
+  private initializeTurnstile(): void {
+    if (typeof window.turnstile !== 'undefined') {
+      this.renderTurnstile();
+    } else {
+      // Retry after 100ms if script not loaded yet
+      setTimeout(() => this.initializeTurnstile(), 100);
+    }
+  }
 
-  onSubmit() {
-    this.serverError = '';
-    if (!this.recaptchaToken) {
-      this.recaptchaError = true;
+  renderTurnstile(): void {
+    try {
+      this.turnstileWidgetId = window.turnstile.render('#turnstile-widget', {
+        sitekey: '0x4AAAAAAB6ex4m3be45YUkv', // Replace with your site key
+        callback: (token: string) => {
+          this.turnstileToken = token;
+          this.turnstileError = false;
+          this.cdr.detectChanges();
+          console.log('Turnstile token received');
+        },
+        'expired-callback': () => {
+          this.turnstileToken = null;
+          this.cdr.detectChanges();
+          console.log('Turnstile token expired');
+        },
+        'error-callback': () => {
+          this.turnstileToken = null;
+          this.turnstileError = true;
+          this.cdr.detectChanges();
+          console.error('Turnstile error occurred');
+        }
+      });
+      console.log('Turnstile widget rendered with ID:', this.turnstileWidgetId);
+    } catch (error) {
+      console.error('Error rendering Turnstile:', error);
+      this.turnstileError = true;
+    }
+  }
+
+  resetTurnstile(): void {
+    if (window.turnstile && this.turnstileWidgetId) {
+      try {
+        window.turnstile.reset(this.turnstileWidgetId);
+        this.turnstileToken = null;
+        console.log('Turnstile reset');
+      } catch (error) {
+        console.error('Error resetting Turnstile:', error);
+      }
+    }
+  }
+
+  get email() {
+    return this.loginForm.get('email');
+  }
+
+  get password() {
+    return this.loginForm.get('password');
+  }
+
+  onSubmit(): void {
+    if (this.loginForm.invalid) {
+      Object.values(this.loginForm.controls).forEach(control => control.markAsTouched());
       return;
     }
 
-    if (this.loginForm.invalid) return;
+    if (!this.turnstileToken) {
+      this.turnstileError = true;
+      return;
+    }
 
     const { email, password } = this.loginForm.value;
     this.isLoading = true;
 
+    this.authService.login(email, password, this.turnstileToken).subscribe({
+      next: (res: any) => {
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('user', JSON.stringify(res.admin));
+        this.snackbar.show('Login successful', 'success');
+        this.isLoading = false;
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err: any) => {
+        const errorMessage = err.error?.message || 'Login failed';
+        this.snackbar.show(errorMessage, 'error');
+        this.isLoading = false;
+        this.resetTurnstile();
+      }
+    });
+  }
 
-    setTimeout(() => {
-      this.authService.login(email, password).subscribe({
-        next: (res: any) => {
-          localStorage.setItem('token', res.token);
-          localStorage.setItem('admin', JSON.stringify(res.admin));
-          this.router.navigate(['/dashboard']);
-          this.snackbar.show('Login successful', 'success');
-          this.isLoading = false;
-        },
-        error: (err: any) => {
-          this.serverError = err.error?.message || 'Login failed';
-          this.snackbar.show(this.serverError, 'error');
-          this.isLoading = false;
-        }
-      });
-    }, 100); // 100ms ensures spinner renders first
+  ngOnDestroy(): void {
+    // Cleanup - remove widget if it exists
+    if (window.turnstile && this.turnstileWidgetId) {
+      try {
+        window.turnstile.remove(this.turnstileWidgetId);
+      } catch (error) {
+        console.error('Error removing Turnstile widget:', error);
+      }
+    }
   }
 }

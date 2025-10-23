@@ -1,0 +1,155 @@
+<div class="email-editor-container">
+<app-loader [loading]="isLoading"></app-loader> 
+
+   <div class="form-header">
+    <h2>{{isEditMode ? 'Edit Email Template Details' : 'Add New Email Template'}}</h2>
+    <!-- <p class="form-subtitle">{{isEditMode ? 'Edit Email Template Details' : 'Fill in the details to create a new email template'}}</p> -->
+  </div>
+
+  <form [formGroup]="emailForm" class="email-form">
+    
+    <!-- Key & Title -->
+    <div class="form-row">
+     <div class="form-group">
+  <label for="key">
+    Key <span class="required">*</span>
+    <span class="hint">(2–10 characters)</span>
+  </label>
+  <input 
+    type="text"
+    id="key"
+    autocomplete="off" 
+    formControlName="key"
+    maxlength="10"
+    placeholder="e.g., WLC001"
+    class="form-input"
+    [disabled]="isEditMode"
+    [class.invalid]="emailForm.get('key')?.invalid && emailForm.get('key')?.touched"
+  >
+  <span class="error-message" *ngIf="emailForm.get('key')?.invalid && emailForm.get('key')?.touched">
+    {{ getErrorMessage('key') }}
+  </span>
+</div>
+
+
+      <div class="form-group">
+        <label for="title">Title <span class="required">*</span></label>
+        <input 
+          id="title" 
+          autocomplete="off" 
+          formControlName="title" 
+          type="text" 
+          class="form-input" 
+          maxlength="50"
+          placeholder="e.g., Welcome Template"
+          [class.invalid]="emailForm.get('title')?.invalid && emailForm.get('title')?.touched"
+        >
+        <span class="error-message" *ngIf="emailForm.get('title')?.invalid && emailForm.get('title')?.touched">
+          {{ getErrorMessage('title') }}
+        </span>
+      </div>
+    </div>
+
+    <!-- From Name & From Email -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="fromName">From Name <span class="required">*</span></label>
+        <input 
+          id="fromName" 
+          formControlName="fromName" 
+          type="text" 
+          class="form-input" 
+          maxlength="50"
+          placeholder="e.g., John Doe"
+          [class.invalid]="emailForm.get('fromName')?.invalid && emailForm.get('fromName')?.touched"
+        >
+        <span class="error-message" *ngIf="emailForm.get('fromName')?.invalid && emailForm.get('fromName')?.touched">
+          {{ getErrorMessage('fromName') }}
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="fromEmail">From Email <span class="required">*</span></label>
+        <input 
+          id="fromEmail"  
+          formControlName="fromEmail" 
+          type="email" 
+          class="form-input" 
+          maxlength="100"
+          placeholder="e.g., sender@example.com"
+          [class.invalid]="emailForm.get('fromEmail')?.invalid && emailForm.get('fromEmail')?.touched"
+        >
+        <span class="error-message" *ngIf="emailForm.get('fromEmail')?.invalid && emailForm.get('fromEmail')?.touched">
+          {{ getErrorMessage('fromEmail') }}
+        </span>
+      </div>
+    </div>
+
+    <!-- To Email & Status -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="toEmail">To Email <span class="required">*</span></label>
+        <input 
+          id="toEmail" 
+          formControlName="toEmail" 
+          type="email" 
+          maxlength="100"
+          class="form-input" 
+          placeholder="e.g., recipient@example.com"
+          [class.invalid]="emailForm.get('toEmail')?.invalid && emailForm.get('toEmail')?.touched"
+        >
+        <span class="error-message" *ngIf="emailForm.get('toEmail')?.invalid && emailForm.get('toEmail')?.touched">
+          {{ getErrorMessage('toEmail') }}
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="isActive">Status <span class="required">*</span></label>
+        <select id="isActive" formControlName="isActive" class="form-input">
+          <option [ngValue]="true">Active</option>
+          <option [ngValue]="false">Inactive</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Subject -->
+    <div class="form-group">
+      <label for="subject">Subject <span class="required">*</span></label>
+      <input 
+        id="subject" 
+        formControlName="subject" 
+        type="text" 
+        class="form-input" 
+        maxlength="100"
+        placeholder="Enter email subject"
+        [class.invalid]="emailForm.get('subject')?.invalid && emailForm.get('subject')?.touched"
+      >
+      <span class="error-message" *ngIf="emailForm.get('subject')?.invalid && emailForm.get('subject')?.touched">
+        {{ getErrorMessage('subject') }}
+      </span>
+    </div>
+
+    <!-- CKEditor -->
+    <div class="form-group editor-group">
+      <label>Message Content <span class="required">*</span></label>
+      <ckeditor [editor]="Editor" [config]="config" [(ngModel)]="editorData" [ngModelOptions]="{standalone: true}"
+                (ready)="onEditorReady($event)" (change)="onEditorChange()"></ckeditor>
+
+      <div class="word-count">Words: {{ wordCount }} | Characters: {{ characterCount }}</div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="action-buttons">
+      <button type="button" [disabled]="emailForm.invalid || isLoading" (click)="saveEmail()" class="submit-button">
+        <span *ngIf="!isLoading">{{isEditMode ? 'Update' : 'Save'}} Template</span>
+        <span *ngIf="isLoading">Saving...</span>
+      </button>
+
+      <button type="button" (click)="saveAsDraft()" class="submit-button">Save Draft</button>
+      <button type="button" (click)="loadDraft()" class="submit-button">Load Draft</button>
+      <!-- <button type="button" (click)="clearForm()" class="submit-button">Clear Form</button> -->
+      <button type="button" class="cancel-btn" routerLink="/email-template">Cancel</button>
+
+    </div>
+  </form>
+</div>

@@ -28,7 +28,6 @@ import { Component } from '@angular/core';
       padding: 0 8px !important;
       margin: 0 !important;
       margin-left: 24px !important;
-      margin-top: -14px !important;
       font-size: 14px !important;
       border: 1px solid #d9d9d9 !important;
       // border-radius: 2px !important;

@@ -1,75 +1,82 @@
+<app-loader [loading]="isLoading"></app-loader>
+
 <div class="dashboard-container">
   <!-- Sidebar -->
   <div class="sidebar" [ngClass]="{ 'active': sidebarVisible }">
-    <div class="logo">
+    <div class="logo" >
       <h2>Admin Panel</h2>
     </div>
 
     <div class="user-info">
-      <p class="user-name">{{ user.firstName }}</p>
-      <p class="user-role">Admin</p>
+      <img
+        [src]="user.filePath ? 'https://localhost:7164/' + user.filePath : '/Images/avatar.png'"
+        alt="Profile"
+        class="profile-img"
+        style="background-color: aliceblue;"
+      />
+      <div>
+       <p class="user-name">{{ user.name?.split(' ')[0] }}</p>
+        <p class="user-role fw-semibold" style="color: white">{{ user.role }}</p>
+      </div>
     </div>
 
     <nav class="nav">
       <ul>
-        <li 
-          routerLink="/dashboard" 
-          routerLinkActive="active" 
-          (click)="closeSidebar()">
-          <i class="fas fa-home"></i>
-          <span>Dashboard</span>
-        </li>
-        <li 
-          routerLink="/users" 
-          routerLinkActive="active" 
-          (click)="closeSidebar()">
-          <i class="fas fa-users"></i>
-          <span>Users</span>
-        </li>
-        <li 
-          routerLink="/roles" 
-          routerLinkActive="active" 
-          (click)="closeSidebar()">
-          <i class="fas fa-user-shield"></i>
-          <span>Roles</span>
-        </li>
-        <li 
-          routerLink="/cms" 
-          routerLinkActive="active" 
-          (click)="closeSidebar()">
-          <i class="fa-solid fa-newspaper"></i>
-          <span>CMS</span>
-        </li>
-        <li 
-        routerLink="/emial-templates" 
-        routerLinkActive="active" 
-        (click)="closeSidebar()">
-        <i class="fa-solid fa-envelope"></i>
-        <span>Email Templates</span>
-      </li>
-      </ul>
+  <li routerLink="/dashboard" routerLinkActive="active" (click)="closeSidebar()">
+    <i class="fas fa-home"></i>
+    <span>Dashboard</span>
+  </li>
+
+  <li *ngIf="canRead('User')" routerLink="/users" routerLinkActive="active" (click)="closeSidebar()">
+    <i class="fas fa-users"></i>
+    <span>Users</span>
+  </li>
+
+  <li *ngIf="canRead('Role')" routerLink="/roles" routerLinkActive="active" (click)="closeSidebar()">
+    <i class="fas fa-user-shield"></i>
+    <span>Roles</span>
+  </li>
+
+  <li *ngIf="canRead('Email Template')" routerLink="/email-template" routerLinkActive="active" (click)="closeSidebar()">
+    <i class="fa-solid fa-envelope"></i>
+    <span>Email Templates</span>
+  </li>
+
+  <li *ngIf="canRead('Cms')" routerLink="/cms" routerLinkActive="active" (click)="closeSidebar()">
+    <i class="fa-solid fa-newspaper"></i>
+    <span>CMS</span>
+  </li>
+
+
+  <li routerLink="/logs" routerLinkActive="active" (click)="closeSidebar()">
+    <i class="fa-solid fa-clock-rotate-left"></i>
+    <span>Logs</span>
+  </li>
+</ul>
+
     </nav>
   </div>
 
   <!-- Overlay for mobile -->
   <div class="overlay" *ngIf="sidebarVisible" (click)="toggleSidebar()"></div>
 
+    <button class="hamburger" (click)="toggleSidebar()">☰</button>
   <!-- Main content -->
   <div class="main-content">
-    <button class="hamburger" (click)="toggleSidebar()">☰</button>
     <div class="outlet">
-      <div class="profile-dropdown top-right">
+
+      <!-- ✅ Profile dropdown -->
+      <div class="profile-dropdown top-right" #profileDropdown>
         <button class="profile-btn" (click)="toggleProfileMenu()">
           <i class="fas fa-user-circle"></i>
         </button>
-      
+
         <div class="dropdown-menu" *ngIf="profileMenuVisible">
           <a routerLink="/profile" (click)="closeProfileMenu()">Profile</a>
           <a (click)="logout()">Logout</a>
         </div>
       </div>
-      
-      
+
       <router-outlet></router-outlet>
     </div>
   </div>

@@ -1,113 +1,167 @@
+/* Dashboard container */
 .dashboard-container {
-    padding: 30px;
-    background-color: #f9fafc;
-    min-height: calc(100vh - 80px);
-  }
-  
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-    max-width: 1200px;
-  }
-  
-  .stat-card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 24px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  }
-  
-  .stat-card:hover {
-    border-color: #1a73e8;
-    box-shadow: 0 4px 12px rgba(26, 115, 232, 0.15);
-    transform: translateY(-2px);
-  }
-  
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-  
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  box-sizing: border-box;
+}
+
+/* Stats grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* Stat card */
+.stat-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px; /* make card taller */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Hover effect */
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+/* Card header */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  border: 2px solid #61B984;
+  color: #61B984;
+  flex-shrink: 0;
+}
+
+.card-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.card-label {
+  font-size: 18px;
+  font-weight: 500;
+  color: #555;
+}
+
+.card-value {
+  margin-top: 1rem;
+  font-size: 32px;
+  font-weight: 600;
+  color: #222;
+  word-break: break-word;
+}
+
+/* Graph section */
+app-graph {
+  width: 100%;
+  min-height: 400px; /* taller graph for wide screens */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
   .card-icon {
-    width: 48px;
-    height: 48px;
-    background-color: #f0f4ff;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+    width: 45px;
+    height: 45px;
   }
-  
   .card-icon svg {
-    color: #1a73e8;
+    width: 22px;
+    height: 22px;
   }
-  
+  .card-label {
+    font-size: 16px;
+  }
+  .card-value {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 992px) {
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  .stat-card {
+    min-height: 130px;
+    padding: 1.2rem;
+  }
+  .card-value {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+  .stat-card {
+    min-height: 120px;
+    padding: 1rem;
+  }
+  .card-value {
+    font-size: 24px;
+  }
+  .card-label {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .stat-card {
+    min-height: 110px;
+    padding: 0.9rem;
+  }
+  .card-value {
+    font-size: 22px;
+  }
   .card-label {
     font-size: 14px;
-    font-weight: 500;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
   }
-  
+  .card-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .card-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Extra small screens <360px */
+@media (max-width: 360px) {
   .card-value {
-    font-size: 36px;
-    font-weight: 700;
-    color: #1e293b;
-    line-height: 1;
+    font-size: 20px;
   }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .dashboard-container {
-      padding: 20px;
-    }
-  
-    .stats-grid {
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-  
-    .stat-card {
-      padding: 20px;
-    }
-  
-    .card-value {
-      font-size: 32px;
-    }
+  .card-label {
+    font-size: 13px;
   }
-  
-  @media (max-width: 480px) {
-    .dashboard-container {
-      padding: 16px;
-    }
-  
-    .stat-card {
-      padding: 18px;
-    }
-  
-    .card-icon {
-      width: 44px;
-      height: 44px;
-    }
-  
-    .card-icon svg {
-      width: 20px;
-      height: 20px;
-    }
-  
-    .card-value {
-      font-size: 28px;
-    }
-  
-    .card-label {
-      font-size: 13px;
-    }
+  .stat-card {
+    min-height: 100px;
+    padding: 0.75rem;
   }
+}

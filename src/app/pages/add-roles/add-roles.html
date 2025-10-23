@@ -2,25 +2,45 @@
 
 <div class="container">
   <h1 class="title">{{isEditMode ? 'Edit Role' : 'Add New Role'}}</h1>
+    <!-- <p class="form-subtitle">{{isEditMode ? 'Edit Role Details' : 'Fill in the details to create a new Role '}}</p> -->
 
   <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
 
     <!-- Role Name -->
     <div class="form-group">
       <label for="roleName">Role Name *</label>
-      <input id="roleName" formControlName="roleName" type="text" class="form-control" placeholder="Enter role name">
-      <div *ngIf="roleForm.get('roleName')?.invalid && roleForm.get('roleName')?.touched" class="text-danger">
-        Role Name is required.
-      </div>
+      <input id="roleName" formControlName="roleName" type="text" class="form-control" placeholder="Enter role name"
+       autocomplete="off" 
+           maxlength="50"
+      >
+     <div
+    *ngIf="roleForm.get('roleName')?.invalid && roleForm.get('roleName')?.touched"
+    class="text-danger"
+  >
+    <div *ngIf="roleForm.get('roleName')?.hasError('required')">Role Name is required.</div>
+    <div *ngIf="roleForm.get('roleName')?.hasError('minlength')">Role Name must be at least 2 characters.</div>
+    <div *ngIf="roleForm.get('roleName')?.hasError('maxlength')">Role Name cannot exceed 50 characters.</div>
+    <div *ngIf="roleForm.get('roleName')?.hasError('pattern')">Role Name cannot contain consecutive spaces or special characters.</div>
+  </div>
+
     </div>
 
     <!-- Short Description -->
     <div class="form-group">
       <label for="shortDescription">Short Description *</label>
-      <input id="shortDescription" formControlName="shortDescription" type="text" class="form-control" placeholder="Enter short description">
-      <div *ngIf="roleForm.get('shortDescription')?.invalid && roleForm.get('shortDescription')?.touched" class="text-danger">
-        Short Description is required.
-      </div>
+      <input id="shortDescription" formControlName="shortDescription" type="text" class="form-control" placeholder="Enter short description"
+       autocomplete="off" 
+           maxlength="100"
+      >
+   <div
+    *ngIf="roleForm.get('shortDescription')?.invalid && roleForm.get('shortDescription')?.touched"
+    class="text-danger"
+  >
+    <div *ngIf="roleForm.get('shortDescription')?.hasError('required')">Short Description is required.</div>
+    <div *ngIf="roleForm.get('shortDescription')?.hasError('minlength')">Short Description must be at least 4 characters.</div>
+    <div *ngIf="roleForm.get('shortDescription')?.hasError('maxlength')">Short Description cannot exceed 100 characters.</div>
+    <div *ngIf="roleForm.get('shortDescription')?.hasError('pattern')">Short Description cannot contain consecutive spaces or special characters.</div>
+  </div>
     </div>
 
     <!-- Status -->
@@ -34,8 +54,8 @@
 
     <!-- Select/Unselect All Buttons -->
     <div class="select-buttons">
-      <button type="button" class="btn btn-select-all" (click)="selectAllPermissions()">Select All</button>
-      <button type="button" class="btn btn-unselect-all" (click)="unselectAllPermissions()">Unselect All</button>
+      <button type="button" class="cancel-btn" (click)="selectAllPermissions()">Select All</button>
+      <button type="button" class="cancel-btn" (click)="unselectAllPermissions()">Unselect All</button>
     </div>
 
     <!-- Permissions -->
@@ -87,6 +107,17 @@
       </div>
     </div>
 
-    <button type="submit" class="btn-submit" [disabled]="roleForm.invalid">{{isEditMode ? 'Update Role' : 'Add Role'}}</button>
+        <div class="form-actions">
+       <button type="button" class="cancel-btn" routerLink="/roles">Cancel</button>
+      
+      <button type="submit" class="submit-button" [disabled]="roleForm.invalid">
+        <span *ngIf="!isLoading">{{isEditMode ? "Update Role": "Add Role"}}</span>
+        <span *ngIf="isLoading">
+          <span class="spinner"></span>
+          {{isEditMode ? "Updating Role": "Creating Role"}}...
+        </span>
+      </button>
+    </div>
+
   </form>
 </div>

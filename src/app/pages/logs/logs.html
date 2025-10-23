@@ -1,0 +1,17 @@
+<app-data-table
+  [title]="'Audit Logs'"
+  [exportButtonText] = "'Export CSV'"
+  [columns]="columns"
+  [fetchDataFn]="fetchLogs.bind(this)"
+  [enableActions]="false"
+  [isAddButtonEnabled] = "false"
+  [enableEdit] = "false"
+  [enableDelete] = "false"
+  [enableIsActive]="false"
+  [enableExport]="true"
+  (onEdit)="handleEdit($event)"
+  (onDelete)="handleDelete($event)"
+  (onActiveChange)="handleActiveChange($event)"
+  (onAdd)="handleAdd()"
+  (onExport)="handleExport()">
+</app-data-table>

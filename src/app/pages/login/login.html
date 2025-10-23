@@ -2,40 +2,81 @@
 <app-loader [loading]="isLoading"></app-loader>
 
 <div class="login-container">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" autocomplete="off">
-      <!-- Hidden dummy fields -->
-      <input type="text" name="fakeusernameremembered" style="display:none">
-      <input type="password" name="fakepasswordremembered" style="display:none">
-  
-      <h2>Admin Login</h2>
-  
-      <!-- Email -->
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" formControlName="email" placeholder="Enter your email*" autocomplete="new-email"/>
-        <div class="error" *ngIf="email?.invalid && (email?.dirty || email?.touched)">
-          <small *ngIf="email?.errors?.['required']">Email is required.</small>
-          <small *ngIf="email?.errors?.['email']">Please enter a valid email.</small>
-        </div>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" autocomplete="off">
+    <!-- Fake fields to trick autofill -->
+    <input type="text" style="display:none" autocomplete="username">
+    <input type="password" style="display:none" autocomplete="new-password">
+
+    <h2>Admin Login</h2>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email">Email*</label>
+      <input 
+        type="email" 
+        id="email" 
+        formControlName="email" 
+        placeholder="Enter your email*"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        readonly
+        onfocus="this.removeAttribute('readonly');"
+      />
+      <div class="error" *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+        <small *ngIf="email?.errors?.['required']">Email is required.</small>
+        <small *ngIf="email?.errors?.['email']">Please enter a valid email.</small>
       </div>
-  
-      <!-- Password -->
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" formControlName="password" placeholder="Enter your password*" autocomplete="new-password"/>
-        <div class="error" *ngIf="password?.invalid && (password?.dirty || password?.touched)">
-          <small *ngIf="password?.errors?.['required']">Password is required.</small>
-        </div>
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+      <label for="password">Password*</label>
+      <div class="password-input-wrapper">
+        <input 
+          [type]="showPassword ? 'text' : 'password'"
+          id="password" 
+          formControlName="password" 
+          placeholder="Enter your password*"
+          autocomplete="new-password"
+          class="password-input"
+          readonly
+          onfocus="this.removeAttribute('readonly');"
+        />
+        <button type="button" class="password-toggle" (click)="togglePasswordVisibility()">
+          <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+          </svg>
+        </button>
       </div>
-  
-      <!-- reCAPTCHA -->
-      <div class="form-group">
-        <div id="recaptcha" class="g-recaptcha"></div>
-        <div class="error" *ngIf="recaptchaError">
-          <small>Please complete the captcha.</small>
-        </div>
+      <div class="error" *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+        <small *ngIf="password?.errors?.['required']">Password is required.</small>
       </div>
-  
-      <button  [disabled]="isLoading || loginForm.invalid" type="submit">Login</button>
-    </form>
+      <div class="forget-password">
+        <a routerLink="/forget-password">Forgot Password?</a>
+      </div>
+    </div>
+
+    <!-- Turnstile Widget -->
+    <div class="form-group">
+      <div id="turnstile-widget"></div>
+      <div class="error" *ngIf="turnstileError">
+        <small>Please complete the security verification.</small>
+      </div>
+    </div>
+
+    <button 
+      [disabled]="isLoading" 
+      type="submit"
+      class="login-button"
+    >
+      {{ isLoading ? 'Logging in...' : 'Login' }}
+    </button>
+  </form>
 </div>

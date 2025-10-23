@@ -2,7 +2,7 @@
 <div class="form-container">
   <div class="form-header">
     <h2>{{isEditMode ? 'Edit User Details' : 'Add New User'}}</h2>
-    <p class="form-subtitle">{{isEditMode ? 'Edit User Details' : 'Fill in the details to create a new user account'}}</p>
+    <!-- <p class="form-subtitle">{{isEditMode ? 'Edit User Details' : 'Fill in the details to create a new user account'}}</p> -->
   </div>
 
   <form [formGroup]="userForm" (ngSubmit)="submitForm()" autocomplete="off">
@@ -13,17 +13,35 @@
         <input 
           type="text" 
           id="name"
+          maxlength="50"
           formControlName="name" 
           placeholder="Enter full name"
           class="form-control"
-          [class.is-invalid]="f['name'].invalid && (f['name'].dirty || f['name'].touched)"
+          [class.is-invalid]="f['name'].invalid &&  f['name'].touched"
         />
-        <div class="invalid-feedback" *ngIf="f['name'].invalid && (f['name'].dirty || f['name'].touched)">
-          <small *ngIf="f['name'].errors?.['required']">Name is required.</small>
-          <small *ngIf="f['name'].errors?.['minlength']">Minimum 2 characters required.</small>
-          <small *ngIf="f['name'].errors?.['maxlength']">Maximum 50 characters allowed.</small>
-          <small *ngIf="f['name'].errors?.['pattern']">Only alphabets and spaces allowed.</small>
-        </div>
+    <div class="invalid-feedback" *ngIf="f['name'].touched && f['name'].invalid">
+  <small *ngIf="f['name'].errors?.['required']; else patternErr">Name is required.</small>
+
+  <ng-template #patternErr>
+    <small *ngIf="f['name'].errors?.['pattern']; else minErr">
+      Only alphabets and spaces allowed.
+    </small>
+  </ng-template>
+
+  <ng-template #minErr>
+    <small *ngIf="f['name'].errors?.['minlength']; else maxErr">
+      Minimum 2 characters required.
+    </small>
+  </ng-template>
+
+  <ng-template #maxErr>
+    <small *ngIf="f['name'].errors?.['maxlength']">
+      Maximum 50 characters allowed.
+    </small>
+  </ng-template>
+</div>
+
+
       </div>
 
       <div class="form-group">
@@ -34,9 +52,10 @@
           formControlName="email" 
           placeholder="Enter email address"
           class="form-control"
-          [class.is-invalid]="f['email'].invalid && (f['email'].dirty || f['email'].touched)"
+          maxlength="100"
+          [class.is-invalid]="f['email'].invalid && f['email'].touched"
         />
-        <div class="invalid-feedback" *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)">
+        <div class="invalid-feedback" *ngIf="f['email'].invalid && f['email'].touched">
           <small *ngIf="f['email'].errors?.['required']">Email is required.</small>
           <small *ngIf="f['email'].errors?.['email']">Invalid email format.</small>
           <small *ngIf="f['email'].errors?.['maxlength']">Maximum 100 characters allowed.</small>
@@ -45,30 +64,38 @@
     </div>
 
     <!-- Phone Number Section -->
-    <div class="form-group">
-      <label for="phone">Phone Number <span class="required">*</span></label>
-      <div class="phone-input-wrapper" 
-           [class.is-invalid]="f['phone'].invalid && (f['phone'].dirty || f['phone'].touched)">
-        <ngx-intl-tel-input
-          [preferredCountries]="preferredCountries"
-          [enableAutoCountrySelect]="true"
-          [enablePlaceholder]="true"
-          [searchCountryFlag]="true"
-          [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
-          [selectFirstCountry]="false"
-          [selectedCountryISO]="CountryISO.India"
-          [maxLength]="10"
-          [phoneValidation]="true"
-          name="phone"
-          formControlName="phone">
-        </ngx-intl-tel-input>
-      </div>
-      <div class="invalid-feedback" *ngIf="f['phone'].invalid && (f['phone'].dirty || f['phone'].touched)">
-        <!-- <small *ngIf="f['phone'].errors?.['required']">Phone number is required.</small> -->
-        <small *ngIf="f['phone'].errors?.['invalidPhone']">Please enter a valid phone number.</small>
-      </div>
-           
-    </div>
+  <!-- Phone Number Section -->
+<!-- Phone Number Section -->
+<!-- Phone Number Section -->
+<!-- Phone Number Section -->
+<div class="form-group">
+  <div class="coustom">
+    <label for="phone">Phone Number <span class="required">*</span></label>
+    <ngx-intl-tel-input
+      [preferredCountries]="preferredCountries"
+      [enableAutoCountrySelect]="true"
+      [enablePlaceholder]="true"
+      [searchCountryFlag]="true"
+      [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+      [selectFirstCountry]="false"
+      [selectedCountryISO]="CountryISO.India"
+      [numberFormat]="PhoneNumberFormat.National"
+      [separateDialCode]="separateDialCode"
+      [maxLength]="15"
+      name="phone"
+      formControlName="phone"
+      [cssClass]="f['phone'].invalid && f['phone'].touched ? 'form-control is-invalid' : 'form-control'"
+    >
+    </ngx-intl-tel-input>
+  </div>
+  
+  <div class="invalid-feedback" style="display: block;" *ngIf="f['phone'].invalid && f['phone'].touched">
+    <small *ngIf="f['phone'].errors?.['required']">Phone number is required.</small>
+    <small *ngIf="f['phone'].errors?.['validatePhoneNumber'] && !f['phone'].errors?.['required']">
+      {{ f['phone'].errors?.['validatePhoneNumber']?.message || 'Invalid phone number format.' }}
+    </small>
+  </div>
+</div>
 
     <!-- Username -->
     <div class="form-group">
@@ -79,9 +106,11 @@
         formControlName="username" 
         placeholder="Enter username"
         class="form-control"
-        [class.is-invalid]="f['username'].invalid && (f['username'].dirty || f['username'].touched)"
+        maxlength="50"
+        (keydown)="preventConsecutiveSpaces($event, 'username')"
+        [class.is-invalid]="f['username'].invalid && f['username'].touched"
       />
-      <div class="invalid-feedback" *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched)">
+      <div class="invalid-feedback" *ngIf="f['username'].invalid && f['username'].touched">
         <small *ngIf="f['username'].errors?.['required']">Username is required.</small>
         <small *ngIf="f['username'].errors?.['minlength']">Minimum 4 characters required.</small>
         <small *ngIf="f['username'].errors?.['maxlength']">Maximum 50 characters allowed.</small>
@@ -99,9 +128,9 @@
           formControlName="dob" 
           [max]="today"
           class="form-control"
-          [class.is-invalid]="f['dob'].invalid && (f['dob'].dirty || f['dob'].touched)"
+          [class.is-invalid]="f['dob'].invalid && f['dob'].touched"
         />
-        <div class="invalid-feedback" *ngIf="f['dob'].invalid && (f['dob'].dirty || f['dob'].touched)">
+        <div class="invalid-feedback" *ngIf="f['dob'].invalid && f['dob'].touched">
           <small *ngIf="f['dob'].errors?.['required']">Date of birth is required.</small>
           <small *ngIf="f['dob'].errors?.['futureDate']">Date cannot be in the future.</small>
         </div>
@@ -113,14 +142,14 @@
           id="role"
           formControlName="role"
           class="form-control"
-          [class.is-invalid]="f['role'].invalid && (f['role'].dirty || f['role'].touched)"
+          [class.is-invalid]="f['role'].invalid && f['role'].touched"
         >
           <option value="" disabled selected>Select Role</option>
           <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
         </select>
-        <div class="invalid-feedback" *ngIf="f['role'].invalid && (f['role'].dirty || f['role'].touched)">
+        <div class="invalid-feedback" *ngIf="f['role'].invalid && f['role'].touched">
           <small *ngIf="f['role'].errors?.['required']">Role is required.</small>
-        </div>
+        </div>     
       </div>
     </div>
 
@@ -138,6 +167,33 @@
       </select>
     </div>
 
+
+    <div class="form-group">
+     <label for="password">
+  Password
+  <span class="required" *ngIf="!isEditMode">*</span>
+</label>
+
+      <input 
+        type="text" 
+        id="password"
+        formControlName="password" 
+        placeholder="Enter password"
+        class="form-control"
+        maxlength="50"
+        (keydown)="preventConsecutiveSpaces($event, 'password')"
+        [class.is-invalid]="f['password'].invalid && f['password'].touched"
+      />
+      <div class="invalid-feedback" *ngIf="f['password'].invalid && f['password'].touched">
+  <small *ngIf="f['password'].errors?.['required'] && !isEditMode">Password is required.</small>
+  <small *ngIf="f['password'].errors?.['maxlength']">Maximum 50 characters allowed.</small>
+  <small *ngIf="f['password'].errors?.['pattern']">Only alphanumeric characters allowed.</small>
+  <small *ngIf="f['password'].errors?.['weakPassword']">
+    Password must be at least 8 characters, include 1 uppercase, 1 number and 1 special character.
+  </small>
+</div>
+
+    </div>
     <!-- Photo Upload -->
     <div class="form-group">
       <label>Profile Photo</label>
@@ -161,7 +217,7 @@
       <div class="invalid-feedback" style="display: block;" *ngIf="photoError">{{ photoError }}</div>
     
       <div class="photo-preview-wrapper" *ngIf="photoPreview">
-        <img [src]="photoPreview" alt="Photo Preview" class="photo-preview" />
+        <img *ngIf="photoPreview" [src]="photoPreview" alt="Photo Preview" width="150"/>
         <button type="button" class="remove-photo" (click)="removePhoto()">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -171,12 +227,15 @@
       </div>
     </div>
 
+    
+
     <!-- Submit Button -->
     <div class="form-actions">
-      <button type="button" class="btn btn-secondary" (click)="resetForm()">
-        Reset
+       <button type="button" class="cancel-btn" routerLink="/users">
+        Cancel
       </button>
-      <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid || isLoading">
+      
+      <button type="submit" class="submit-button" [disabled]="userForm.invalid || isLoading">
         <span *ngIf="!isLoading">{{isEditMode ? "Update User": "Create User"}}</span>
         <span *ngIf="isLoading">
           <span class="spinner"></span>

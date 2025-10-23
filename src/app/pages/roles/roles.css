@@ -88,9 +88,10 @@
   height: 100%;
   border-radius: 10px;
   border: 1px solid #dce1eb;
-  --ag-header-background-color: #1abc9c;
-  --ag-header-foreground-color: white;
-  --ag-header-height: 45px;
+  --ag-header-background-color: white;
+  --ag-header-foreground-color: black;
+
+  --ag-header-height: 30px;
   --ag-font-family: 'Inter', sans-serif;
   --ag-font-size: 14px;
   --ag-row-hover-color: #e8f0fe;
@@ -187,7 +188,7 @@
     font-size: 16px !important;
     margin: 4px !important;
     border-radius: 6px !important;
-    background-color: #1a73e8 !important;
+    /* background-color: #1a73e8 !important; */
     color: #fff !important;
     align-items: center;
     justify-content: center;
@@ -208,7 +209,7 @@
     padding: 0 8px !important;
     text-align: center !important;
     font-weight: 600 !important;
-    border: 2px solid #1a73e8 !important;
+    /* border: 2px solid #1a73e8 !important; */
     border-radius: 6px !important;
     background-color: #fff !important;
     color: #2c3e50 !important;
@@ -244,5 +245,200 @@
 
   :host ::ng-deep .ag-paging-description {
     font-size: 12px !important;
+  }
+}
+
+
+/* Floating filter placeholder styling */
+::ng-deep .ag-header-cell[col-id="key"] .ag-floating-filter-input input::placeholder,
+::ng-deep .ag-header-cell[col-id="subject"] .ag-floating-filter-input input::placeholder,
+::ng-deep .ag-header-cell[col-id="title"] .ag-floating-filter-input input::placeholder,
+::ng-deep .ag-header-cell[col-id="isActive"] .ag-floating-filter-input input::placeholder {
+  opacity: 0.6 !important;
+  color: #999 !important;
+}
+
+/* General floating filter input styling */
+::ng-deep .ag-floating-filter-input input {
+  color: #000 !important;
+  font-size: 14px !important;
+}
+
+
+:host ::ng-deep .ag-cell {
+ padding: 2px 8px !important;
+ /* You can simplify the following properties for better centering/performance: */
+ white-space: normal !important;
+ word-break: break-word !important;
+ display: flex !important;
+ /* FIX: Change flex-start to center for vertical alignment */
+ align-items: center !important; 
+ justify-content: center; /* Keep this for horizontal centering if needed */
+}
+
+
+:host ::ng-deep .ag-cell {
+  padding: 2px 8px !important;   /* tiny padding */
+  line-height: 1.2 !important;   /* tight line spacing */
+  white-space: normal !important;
+  word-break: break-word !important;
+  display: flex !important;
+}
+
+/* =======================
+   HIDE HORIZONTAL SCROLLBAR
+======================= */
+/* Hide scrollbar for AG Grid body viewport */
+:host ::ng-deep .ag-body-horizontal-scroll {
+  display: none !important;
+}
+
+:host ::ng-deep .ag-body-horizontal-scroll-viewport {
+  overflow-x: hidden !important;
+}
+
+/* Hide scrollbar but keep scroll functionality */
+:host ::ng-deep .ag-body-viewport {
+  overflow-x: auto !important;
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+}
+
+:host ::ng-deep .ag-body-viewport::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
+}
+
+:host ::ng-deep .ag-center-cols-viewport {
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+:host ::ng-deep .ag-center-cols-viewport::-webkit-scrollbar {
+  display: none !important;
+}
+
+
+
+
+
+
+
+
+
+/* =======================
+   EXTREME SMALL DEVICES (<320px)
+======================= */
+@media (max-width: 320px) {
+  .grid-wrapper { height: calc(100vh - 220px); min-height: 240px; }
+
+  :host ::ng-deep .ag-paging-panel {
+    padding: 3px 1px !important;
+    gap: 1px !important;
+  }
+
+  :host ::ng-deep .ag-paging-button {
+    width: 22px !important;
+    height: 22px !important;
+    font-size: 9px !important;
+    margin: 0.5px !important;
+  }
+
+  :host ::ng-deep .ag-paging-number {
+    width: 28px !important;
+    height: 22px !important;
+    font-size: 9px !important;
+    padding: 0 1px !important;
+  }
+
+  :host ::ng-deep .ag-paging-description {
+    font-size: 8px !important;
+    margin: 0 1px !important;
+  }
+
+  :host ::ng-deep .ag-paging-page-size select {
+    max-width: 48px !important;
+    width: auto !important;
+    padding: 2px 12px 2px 2px !important;
+    font-size: 8px !important;
+    box-sizing: border-box !important;
+  }
+
+  :host ::ng-deep .ag-paging-row-summary-panel,
+  :host ::ng-deep .ag-paging-page-size,
+  :host ::ng-deep .ag-paging-page-summary-panel {
+    font-size: 8px !important;
+    gap: 1px !important;
+  }
+}
+
+
+
+
+@media (max-width: 600px) {
+  /* Ensure the pagination panel stays inside the container */
+  :host ::ng-deep .ag-paging-panel {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 8px 10px !important;
+    box-sizing: border-box !important;
+    gap: 6px !important;
+  }
+
+  /* All paging children */
+  :host ::ng-deep .ag-paging-row-summary-panel,
+  :host ::ng-deep .ag-paging-page-size,
+  :host ::ng-deep .ag-paging-page-summary-panel {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    gap: 4px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Pagination buttons (Next/Prev + page numbers) */
+  :host ::ng-deep .ag-paging-button {
+    flex-shrink: 0 !important;
+    min-width: 40px !important;      /* ensures buttons are visible */
+    max-width: 50px !important;      /* prevents stretching too much */
+    height: 36px !important;
+    font-size: 14px !important;
+    margin: 2px !important;
+    border-radius: 6px !important;
+    padding: 0 4px !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+  }
+
+  /* Disabled buttons style */
+  :host ::ng-deep .ag-paging-button:disabled {
+    background-color: #ccc !important;
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+  }
+
+  /* Page number input */
+  :host ::ng-deep .ag-paging-number {
+    min-width: 50px !important;
+    height: 36px !important;
+    font-size: 14px !important;
+    padding: 0 4px !important;
+    text-align: center !important;
+    border-radius: 6px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* "of X" label */
+  :host ::ng-deep .ag-paging-description {
+    font-size: 12px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    margin: 0 4px !important;
   }
 }

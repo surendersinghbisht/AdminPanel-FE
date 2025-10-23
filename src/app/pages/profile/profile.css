@@ -1,12 +1,14 @@
 /* Profile Container */
 .profile-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 2rem;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
+  width: 95%; /* or 100% if you want it fully stretched */
+  max-width: none; /* remove the previous max-width restriction */
+  margin: 0 auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
   
   /* Profile Header */
   .profile-header {
@@ -502,3 +504,37 @@
   button {
     font-family: inherit;
   }
+
+
+  .password-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-input {
+  padding-right: 45px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  transition: color 0.2s;
+}
+
+.password-toggle:hover {
+  color: #374151;
+}
+
+.password-toggle:focus {
+  outline: none;
+}

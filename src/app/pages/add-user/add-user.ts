@@ -1,35 +1,62 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/AuthService';
-import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { AuthService, getAdminFromLocalHost } from '../../services/AuthService';
+import { Router, RouterModule } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
-import { SearchCountryField, CountryISO } from 'ngx-intl-tel-input';
+import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 import { LoaderComponent } from '../../Components/loader/loader';
 import { Role, RoleService } from '../../services/RoleService';
 import { ActivatedRoute } from '@angular/router';
+import { AngularPhoneNumberInput } from 'angular-phone-number-input';
+import { formatDate } from '@angular/common';
+
+
+function nameValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) return { required: true };
+
+  // Trim leading/trailing spaces
+  const trimmed = control.value.trim();
+
+  if (trimmed.length < 2) return { minlength: { requiredLength: 2, actualLength: trimmed.length } };
+  if (trimmed.length > 50) return { maxlength: { requiredLength: 50, actualLength: trimmed.length } };
+
+  // Only letters and single spaces between words
+  const regex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+  if (!regex.test(trimmed)) return { pattern: true };
+
+  return null;
+} 
 
 @Component({
   selector: 'app-user-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgxIntlTelInputModule, LoaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, NgxIntlTelInputModule, LoaderComponent, AngularPhoneNumberInput, RouterModule],
   templateUrl: './add-user.html',
   styleUrls: ['./add-user.css'],
   encapsulation: ViewEncapsulation.None
-
 })
 export class AddUserComponent implements OnInit {
-    isEditMode = false
-    userId: string | null = null;
+  isEditMode = false;
+  userId: string | null = null;
   userForm!: FormGroup;
   photoPreview: string | ArrayBuffer | null = null;
   photoError: string = '';
   photoFile: File | null = null;
-  today: string = new Date().toISOString().split('T')[0];
-  roles:string[] = [];
+  photoRemoved: boolean = false;
+  today: string = this.getTodayDate();
+  roles: string[] = [];
   isLoading = false;
+  PhoneNumberFormat = PhoneNumberFormat;
+  phoneHasBeenInteracted = false;
   
+  // Role search properties
+  filteredRoles: string[] = [];
+  showRoleDropdown: boolean = false;
+  roleSearchTerm: string = '';
+  separateDialCode = false;
   SearchCountryField = SearchCountryField;
   CountryISO = CountryISO;
   preferredCountries: CountryISO[] = [CountryISO.UnitedStates, CountryISO.India];
@@ -46,88 +73,134 @@ export class AddUserComponent implements OnInit {
   ngOnInit(): void {
     this.initializeForm();
     this.getAllRoles();
+
+    // Fix phone initial touched state
+    setTimeout(() => {
+      const phoneControl = this.userForm.get('phone');
+      phoneControl?.markAsUntouched();
+    }, 100);
+
     this.userId = this.route.snapshot.paramMap.get('id');
     if (this.userId) {
       this.isEditMode = true;
       this.getUserById(this.userId);
+      const passwordControl = this.userForm.get('password');
+      passwordControl?.clearValidators();
+      passwordControl?.setValidators([Validators.minLength(8), Validators.maxLength(50), this.passwordStrengthValidator]);
+      passwordControl?.updateValueAndValidity();
     }
   }
 
-  getUserById(userId: string) {
+  preventConsecutiveSpaces(event: KeyboardEvent, controlName: string) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+
+    if (event.key === ' ' && (value.endsWith(' ') || value.length === 0)) {
+      event.preventDefault();
+    }
+  }
+
+  getTodayDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = ('0' + (today.getMonth() + 1)).slice(-2);
+    const day = ('0' + today.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+
+  getUserById(userId: string): void {
+    this.isLoading = true;
     this.authService.getUserById(Number(userId)).subscribe({
       next: (response) => {
+        this.isLoading = false;
         console.log('User fetched successfully:', response);
+        console.log('DOB from response:', response.dob);
   
         // Format DOB as yyyy-MM-dd
-        if (response.dob) {
-          const dob = new Date(response.dob);
-          response.dob = dob.toISOString().split('T')[0]; // "yyyy-MM-dd"
+       if (response.dob) {
+  const dob = new Date(response.dob);
+  response.dob = formatDate(dob, 'yyyy-MM-dd', 'en-US'); // ensures correct local date format
+}
+
+        // Load existing photo preview
+        if (response.filePath) {
+          const cleanPath = response.filePath.replace(/^\/+/, '');
+          this.photoPreview = `https://localhost:7164/${cleanPath}`;
+          console.log('Photo preview URL:', this.photoPreview);
+        } else {
+          this.photoPreview = null;
         }
-  
-        this.userForm.patchValue(response);
+
+        // Reset flags
+        this.photoRemoved = false;
+        this.photoFile = null;
+
+        // Set role search term for edit mode
+        this.roleSearchTerm = response.role || '';
+        
+        // Patch form with response data
+        this.userForm.patchValue({
+          id: response.id,
+          name: response.name,
+          email: response.email,
+          phone: response.phone,
+          username: response.username,
+          dob: response.dob,
+          role: response.role,
+          isActive: response.isActive,
+          filePath: response.filePath
+        });
+        
+        console.log('Form values after patch:', this.userForm.value);
       },
       error: (error) => {
+        this.isLoading = false;
         console.error('Error fetching user:', error);
+        this.snackBar.open('Error loading user details', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar']
+        });
       }
     });
   }
-  
 
   private initializeForm(): void {
     this.userForm = this.fb.group({
-      name: [
-        '', 
-        [
-          Validators.required, 
-          Validators.minLength(2), 
-          Validators.maxLength(50), 
-          Validators.pattern(/^[A-Za-z ]+$/)
-        ]
-      ],
-      email: [
-        '', 
-        [
-          Validators.required, 
-          Validators.email, 
-          Validators.maxLength(100)
-        ]
-      ],
-      phone: [undefined, [this.phoneValidator]],
-      username: [
-        '', 
-        [
-          Validators.required, 
-          Validators.minLength(4), 
-          Validators.maxLength(50), 
-          Validators.pattern(/^[A-Za-z0-9]+$/)
-        ]
-      ],
-      dob: [
-        '', 
-        [
-          Validators.required, 
-          this.futureDateValidator
-        ]
-      ],
+      id: [''],
+      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern(/^[A-Za-z\s]*$/)]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
+      phone: ['', [Validators.required]], 
+      username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50), Validators.pattern(/^[A-Za-z0-9]+$/)]],
+      dob: ['', [Validators.required, this.futureDateValidator]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50), this.passwordStrengthValidator]],
       role: ['', Validators.required],
-      isActive: [true, Validators.required]
+      isActive: [true, Validators.required],
+      filePath: [''],
     });
+  }
+
+  private passwordStrengthValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.value;
+    if (!password) return null;
+
+    const pattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,50}$/;
+
+    return pattern.test(password) ? null : { weakPassword: true };
   }
 
   phoneValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
-  
-    if (!value || !value.number) {
-      // empty or invalid object
+
+    if (!value || !value.number || value.number.trim() === '') {
       return { required: true };
     }
-  
-    // Optionally: check length or number validity
-    const digitsOnly = value.number.replace(/\D/g, '');
-    if (digitsOnly.length < 10) {
-      return { invalidPhone: true };
+
+    if (value.validationErrors || value.isValid === false) {
+      return { validatePhoneNumber: { message: 'The phone number format is invalid.' } };
     }
-  
+    
     return null;
   }
 
@@ -139,10 +212,12 @@ export class AddUserComponent implements OnInit {
     if (!control.value) {
       return null;
     }
+
     const inputDate = new Date(control.value);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+    inputDate.setHours(0, 0, 0, 0);
+
     return inputDate > today ? { futureDate: true } : null;
   }
 
@@ -150,33 +225,30 @@ export class AddUserComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     
-    // Reset previous state
     this.photoError = '';
     this.photoPreview = null;
     this.photoFile = null;
+    this.photoRemoved = false;
 
     if (!file) {
       return;
     }
 
-    // Validate file type
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     if (!validTypes.includes(file.type)) {
       this.photoError = 'Only JPG, JPEG, or PNG formats are allowed.';
-      input.value = ''; // Clear the input
+      input.value = '';
       return;
     }
 
-    // Validate file size (2MB max)
     const maxSizeMB = 2;
     const maxSizeBytes = maxSizeMB * 1024 * 1024;
     if (file.size > maxSizeBytes) {
       this.photoError = `File size must be less than ${maxSizeMB} MB.`;
-      input.value = ''; // Clear the input
+      input.value = '';
       return;
     }
 
-    // All validations passed, store file and create preview
     this.photoFile = file;
     
     const reader = new FileReader();
@@ -190,13 +262,13 @@ export class AddUserComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
- 
   removePhoto(): void {
+    console.log('Removing photo - setting photoRemoved flag to true');
     this.photoPreview = null;
     this.photoError = '';
     this.photoFile = null;
+    this.photoRemoved = true;
     
-    // Clear the file input
     const fileInput = document.getElementById('photo') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
@@ -205,31 +277,79 @@ export class AddUserComponent implements OnInit {
 
   resetForm(): void {
     this.userForm.reset({
-      isActive: true // Set default value for isActive
+      isActive: true
     });
     this.removePhoto();
+    this.photoRemoved = false;
+    this.roleSearchTerm = '';
+    this.filteredRoles = [...this.roles];
   }
 
-  getAllRoles(){
-    let rolesArr:string[] = [];
-this.roleService.getAllRoles().subscribe({
-  next: (response:Role[]) => {
-    response.filter((role:Role)=> role.isActive).forEach((role:Role)=> {
-      rolesArr.push(role.roleName);
-    })
-    this.roles = rolesArr;
-  },
-  error: (error) => {
-    console.error('Error fetching roles:', error);
+  getAllRoles(): void {
+    this.roleService.getAllRoleNames().subscribe({
+      next: (response: any) => {
+        this.filteredRoles = response;
+        this.roles = response;
+      },
+      error: (error) => {
+        console.error('Error fetching roles:', error);
+        this.snackBar.open('Error loading roles', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
   }
-})
+
+  onRoleInputFocus(): void {
+    this.showRoleDropdown = true;
+    this.filterRoles(this.roleSearchTerm);
+  }
+
+  onRoleInputBlur(): void {
+    setTimeout(() => {
+      this.showRoleDropdown = false;
+    }, 200);
+  }
+
+  onRoleSearch(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.roleSearchTerm = input.value;
+    this.filterRoles(this.roleSearchTerm);
+  }
+
+  filterRoles(searchTerm: string): void {
+    if (!searchTerm || searchTerm.trim() === '') {
+      this.filteredRoles = [...this.roles];
+    } else {
+      const term = searchTerm.toLowerCase().trim();
+      this.filteredRoles = this.roles.filter(role => 
+        role.toLowerCase().includes(term)
+      );
+    }
+  }
+
+  selectRole(role: string): void {
+    this.roleSearchTerm = role;
+    this.userForm.patchValue({ role: role });
+    this.userForm.get('role')?.markAsTouched();
+    this.showRoleDropdown = false;
+  }
+
+  clearRoleSelection(): void {
+    this.roleSearchTerm = '';
+    this.userForm.patchValue({ role: '' });
+    this.filteredRoles = [...this.roles];
+    this.showRoleDropdown = false;
   }
 
   submitForm(): void {
     this.markFormGroupTouched(this.userForm);
 
     if (this.userForm.invalid) {
-      this.snackBar.open('Please fill all required fields correctly', 'Close', {
+      this.snackBar.open('Please fill the form correctly!', 'Close', {
         duration: 3000,
         horizontalPosition: 'end',
         verticalPosition: 'top',
@@ -238,29 +358,34 @@ this.roleService.getAllRoles().subscribe({
       return;
     }
 
-    this.isLoading = true;
+    const nameControl = this.userForm.get('name');
+    const usernameControl = this.userForm.get('username');
+    if (nameControl?.value) {
+      nameControl.setValue(nameControl.value.trim());
+    }
+    if (usernameControl?.value) {
+      usernameControl.setValue(usernameControl.value.trim());
+    }
 
+    this.isLoading = true;
     const formData = this.prepareFormData();
 
-    const payload = {
-      ...this.userForm.value,
-      userId: this.userId,
-      phone: this.userForm.value.phone?.e164Number,
-      dob: this.userForm.value.dob,
-      isActive: this.userForm.value.isActive === true || this.userForm.value.isActive === 'true'
-    };
-    
-    if(this.isEditMode && this.userId) {
-      this.authService.updateUser(payload).subscribe({
+    console.log('Submitting with photoRemoved flag:', this.photoRemoved);
+
+    if (this.isEditMode && this.userId) {
+      this.authService.updateUser(formData).subscribe({
         next: (response) => {
-          this.isLoading = false;
           this.snackBar.open('User updated successfully!', 'Close', {
             duration: 3000,
             horizontalPosition: 'end',
             verticalPosition: 'top',
             panelClass: ['success-snackbar']
           });
-          this.router.navigate(['/users']);
+          
+          setTimeout(() => {
+            this.isLoading = false;
+            this.router.navigate(['/users']);
+          }, 500);
         },
         error: (error) => {
           this.isLoading = false;
@@ -273,61 +398,92 @@ this.roleService.getAllRoles().subscribe({
           });
           console.error('Error updating user:', error);
         }
-      })
-    } else{
-
-    // Submit to API
-    this.authService.addUser(payload).subscribe({
-      next: (response) => {
-        this.isLoading = false;
-        this.snackBar.open('User added successfully!', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          panelClass: ['success-snackbar']
-        });
-        this.router.navigate(['/users']);
-      },
-      error: (error) => {
-        this.isLoading = false;
-        const errorMessage = error?.error?.message || 'Failed to add user. Please try again.';
-        this.snackBar.open(errorMessage, 'Close', {
-          duration: 5000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          panelClass: ['error-snackbar']
-        });
-        console.error('Error adding user:', error);
-      }
-    });
-  }
-  }
-
-  private prepareFormData(): FormData | any {
-    const formValue = this.userForm.value;
-
-    // If photo exists, use FormData for multipart upload
-    if (this.photoFile) {
-      const formData = new FormData();
-      formData.append('name', formValue.name);
-      formData.append('email', formValue.email);
-      formData.append('phone', JSON.stringify(formValue.phone)); // ngx-intl-tel-input returns object
-      formData.append('username', formValue.username);
-      formData.append('dob', formValue.dob);
-      formData.append('role', formValue.role);
-      formData.append('isActive', formValue.isActive.toString());
-      formData.append('photo', this.photoFile, this.photoFile.name);
-      return formData;
+      });
+    } else {
+      console.log('Adding new user with formData:', formData);
+      this.authService.addUser(formData).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          this.snackBar.open('User added successfully!', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar']
+          });
+          this.router.navigate(['/users']);
+        },
+        error: (error) => {
+          this.isLoading = false;
+          const errorMessage = error?.error?.message || 'Failed to add user. Please try again.';
+          this.snackBar.open(errorMessage, 'Close', {
+            duration: 5000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+            panelClass: ['error-snackbar']
+          });
+          console.error('Error adding user:', error);
+        }
+      });
     }
-
-    // Otherwise send as JSON
-    return {
-      ...formValue,
-      phone: formValue.phone // Keep phone as object or convert as needed
-    };
   }
 
- 
+  private prepareFormData(): FormData {
+    const formValue = this.userForm.value;
+    
+    const formData = new FormData();
+    
+    // Always append userId (empty string for new users)
+    formData.append('userId', formValue.id || '');
+    formData.append('name', formValue.name);
+    formData.append('email', formValue.email);
+    formData.append('phone', formValue.phone?.e164Number || formValue.phone || '');
+    formData.append('username', formValue.username);
+    
+    // CRITICAL: Always append DOB if it exists
+    if (formValue.dob) {
+      formData.append('dob', formValue.dob);
+      console.log('DOB being sent:', formValue.dob);
+    } else {
+      console.warn('DOB is missing from form!');
+    }
+    
+    formData.append('role', formValue.role);
+    formData.append('isActive', formValue.isActive.toString());
+    
+    const admin = getAdminFromLocalHost();
+    formData.append('AdminName', admin.name);
+    
+    // Handle password - only send if it has a value (for edit mode)
+    if (formValue.password && formValue.password.trim() !== '') {
+      formData.append('password', formValue.password);
+      console.log('Password is being sent');
+    } else {
+      console.log('Password is empty, not sending');
+    }
+    
+    // Handle photo scenarios
+    if (this.photoFile) {
+      formData.append('FilePath', this.photoFile, this.photoFile.name);
+      formData.append('RemoveCurrentImage', 'false');
+      console.log('Sending new photo:', this.photoFile.name);
+    } else if (this.photoRemoved) {
+      formData.append('RemoveCurrentImage', 'true');
+      console.log('Photo removal flag set to true');
+    } else {
+      formData.append('RemoveCurrentImage', 'false');
+      console.log('No photo change');
+    }
+    
+    // Debug: Log all FormData entries
+    console.log('=== FormData Contents ===');
+    formData.forEach((value, key) => {
+      console.log(`${key}:`, value);
+    });
+    console.log('========================');
+
+    return formData;
+  }
+
   private markFormGroupTouched(formGroup: FormGroup): void {
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
