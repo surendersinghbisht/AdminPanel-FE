@@ -62,7 +62,7 @@ isActive: data.status === true || data.status === 'active',
 permissions: perArr
     }
     var admin = getAdminFromLocalHost();
-payload.AdminName = admin.firstName;
+payload.AdminName = admin.name;
     console.log('payload',payload)
     return this.http.post<any>(`${this.BaseUrl}/add-role`, payload)
 }
@@ -103,7 +103,7 @@ updateRole(data: any, roleId: number):Observable<any>{
     permissions: perArr
         }
         var admin = getAdminFromLocalHost();
-payload.AdminName = admin.firstName;
+payload.AdminName = admin.name;
         console.log('payload',payload)
         return this.http.post<any>(`${this.BaseUrl}/update-role`, payload)
     }
