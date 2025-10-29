@@ -1,5 +1,5 @@
 <app-data-table
-  [title]="'Audit Logs'"
+  [title]="'Logs'"
   [exportButtonText] = "'Export CSV'"
   [columns]="columns"
   [fetchDataFn]="fetchLogs.bind(this)"
@@ -8,10 +8,10 @@
   [enableEdit] = "false"
   [enableDelete] = "false"
   [enableIsActive]="false"
+  [isAddButtonEnabled]="isAddButtonEnabled"
   [enableExport]="true"
   (onEdit)="handleEdit($event)"
   (onDelete)="handleDelete($event)"
   (onActiveChange)="handleActiveChange($event)"
-  (onAdd)="handleAdd()"
   (onExport)="handleExport()">
 </app-data-table>

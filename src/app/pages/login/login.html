@@ -7,7 +7,7 @@
     <input type="text" style="display:none" autocomplete="username">
     <input type="password" style="display:none" autocomplete="new-password">
 
-    <h2>Admin Login</h2>
+    <h2>Login</h2>
 
     <!-- Email -->
     <div class="form-group">
@@ -72,7 +72,7 @@
     </div>
 
     <button 
-      [disabled]="isLoading" 
+      [disabled]="isLoading || loginForm.invalid" 
       type="submit"
       class="login-button"
     >

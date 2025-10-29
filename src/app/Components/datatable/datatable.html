@@ -13,11 +13,11 @@
 
   <!-- Buttons aligned to right -->
   <div class="table-controls mb-3 d-flex justify-content-end gap-2 flex-wrap">
-    <button *ngIf="permissionToAdd" class="btn btn-outline-dark bg-white" (click)="addAction()">
+    <button *ngIf="isAddButtonEnabled" class="cancel-btn" (click)="addAction()">
       <i class="fas fa-plus"></i> {{ addButtonText }}
     </button>
 
-    <button *ngIf="enableExport" class="btn btn-outline-dark bg-white" (click)="exportAction()">
+    <button *ngIf="enableExport" class="cancel-btn" (click)="exportAction()">
       <i class="fas fa-file-export"></i> {{ exportButtonText }}
     </button>
   </div>

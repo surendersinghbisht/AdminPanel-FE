@@ -232,7 +232,7 @@ select.form-control {
 }
 
 input:checked + .slider {
-  background-color: #10b981;
+  background-color: black;
 }
 
 input:checked + .slider:before {

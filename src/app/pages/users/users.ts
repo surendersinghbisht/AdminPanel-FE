@@ -71,8 +71,8 @@ this.router.navigate([`edit-user/${row.id}`]);
 handleDelete(row: any) {
    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         data: {
-          title: 'Delete Role',
-          message: 'Are you sure you want to delete this role?',
+          title: 'Delete User',
+          message: 'Are you sure you want to delete this user?',
           confirmText: 'Delete',
           cancelText: 'Cancel'
         }

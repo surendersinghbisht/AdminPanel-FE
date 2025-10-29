@@ -68,6 +68,8 @@ payload.AdminName = admin.name;
 }
 
 updateRoleActiveStatus(payload:any):Observable<any>{
+        let admin = getAdminFromLocalHost();
+        payload.userName = admin.name;
     console.log('pay',payload)
     return this.http.post<any>(`${this.BaseUrl}/update-role-status`, payload);
 }

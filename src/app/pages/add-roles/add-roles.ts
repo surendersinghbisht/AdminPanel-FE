@@ -150,8 +150,8 @@ export class AddRoleComponent implements OnInit {
         next: (response: any[]) => {
           const permsArray = this.permissionsArray;
           permsArray.clear();
-
-          response.forEach(p => {
+const data = response.filter((p: any) => p.name !== 'Faq');
+          data.forEach(p => {
             const name = this.toPascalCase(p.name || p.permissionName || 'Unknown Permission');
             permsArray.push(this.fb.group({
               permissionName: [name],
@@ -163,7 +163,7 @@ export class AddRoleComponent implements OnInit {
             }));
           });
           
-          console.log('Permissions loaded:', permsArray.length);
+          console.log('Permissions loaded:', data.length);
           this.isLoading = false;
           resolve();
         },
@@ -206,7 +206,7 @@ export class AddRoleComponent implements OnInit {
     this.trimFormValues();
     if (this.roleForm.invalid) {
       this.roleForm.markAllAsTouched();
-      this.snackBar.open('Please fill in all required fields', 'Close', {
+      this.snackBar.open('Please fill the required fields correctly.', 'Close', {
         duration: 3000,
         horizontalPosition: 'end',
         verticalPosition: 'top',

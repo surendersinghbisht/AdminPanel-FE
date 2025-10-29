@@ -5,9 +5,11 @@
 /* ================================
    HTML & BODY
    ================================ */
+   @import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow&display=swap');
+
 html, body {
-  height: 100%;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+height: 100%;
+  font-family: "Archivo Narrow", sans-serif;
   scroll-behavior: smooth;
 }
 
@@ -67,6 +69,9 @@ body {
   font-weight: 500;
 }
 
+
+
+
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -88,6 +93,43 @@ body {
   background-color: red !important; /* red */
   color: white !important;
   opacity: 1 !important; /* Prevent transparency */
+}
+
+/* Remove all backgrounds from snackbar buttons */
+.mat-mdc-snack-bar-container button,
+.mdc-snackbar__surface button,
+.success-snackbar button,
+.error-snackbar button {
+  background-color: transparent !important;
+  background: none !important;
+}
+
+.mat-mdc-snack-bar-container button:hover,
+.mdc-snackbar__surface button:hover,
+.success-snackbar button:hover,
+.error-snackbar button:hover {
+  background-color: transparent !important;
+  background: none !important;
+}
+
+/* Remove Material Design ripple and state layers */
+.mat-mdc-snack-bar-container .mat-mdc-button-persistent-ripple,
+.mat-mdc-snack-bar-container .mat-ripple-element,
+.mat-mdc-snack-bar-container .mdc-button__ripple,
+.mdc-snackbar__surface .mat-mdc-button-persistent-ripple,
+.mdc-snackbar__surface .mat-ripple-element,
+.mdc-snackbar__surface .mdc-button__ripple {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+/* Target the state layer specifically */
+.mat-mdc-snack-bar-container .mat-mdc-button:hover::before,
+.mat-mdc-snack-bar-container .mat-mdc-button::before,
+.mdc-snackbar__surface .mat-mdc-button:hover::before,
+.mdc-snackbar__surface .mat-mdc-button::before {
+  opacity: 0 !important;
+  background-color: transparent !important;
 }
 
 

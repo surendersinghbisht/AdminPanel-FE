@@ -21,7 +21,7 @@ createCms(data:any):Observable<any>{
     const admin = getAdminFromLocalHost();
     let payload = {
         ...data,
-        adminName: admin.firstName
+        adminName: admin.name
     }
     return this.http.post<any>(`${this.baseUrl}/add-cms`,payload)
 }
@@ -31,7 +31,7 @@ updateCms(id:number,data:any):Observable<any>{
     let payload = {
         ...data,
         id,
-        adminName: admin.firstName
+        adminName: admin.name
     }
     return this.http.post<any>(`${this.baseUrl}/update-cms`,payload)
 }
@@ -44,13 +44,18 @@ deleteCms(id:number):Observable<any>{
     const admin = getAdminFromLocalHost();
     let payload = {
         id,
-        adminName: admin.firstName
+        adminName: admin.name
     }
     return this.http.post<any>(`${this.baseUrl}/delete-cms`,payload)
 }
 
 updateActiveStatus(payload:any):Observable<any>{
-    return this.http.post<any>(`${this.baseUrl}/update-active-status`,payload)
+    const admin = getAdminFromLocalHost();
+    let payload1 = {
+        ...payload,
+        userName: admin.name
+    }
+    return this.http.post<any>(`${this.baseUrl}/update-active-status`,payload1)
 }
 
 }

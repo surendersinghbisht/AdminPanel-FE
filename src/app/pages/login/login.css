@@ -1,124 +1,267 @@
+/* login.component.css */
+
+/* Container */
 .login-container {
-  width: 100%;
-  max-width: 400px;
-  margin: 60px auto;
-  padding: 30px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
-  font-family: Arial, sans-serif;
-}
-
-.login-form h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 6px;
-  color: #555;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-.form-group input:focus {
-  border-color: #007bff;
-  outline: none;
-}
-
-.error small {
-  color: red;
-  font-size: 12px;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-button:disabled {
-  background-color: #9ac3f5;
-  cursor: not-allowed;
-}
-
-button:hover:not(:disabled) {
-  background-color: #dadee2;
-}
-
-.forget-password {
-  text-align: right;
-  margin-top: 6px;
-}
-
-.forget-password a {
-  text-decoration: none;
-  font-size: 13px;
-  color: #007bff;
-}
-
-.forget-password a:hover {
-  text-decoration: underline;
-}
-
-.password-input-wrapper {
-  position: relative;
-  width: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.password-input-wrapper input {
-  width: 100%;
-  padding: 10px 45px 10px 12px !important;
-  box-sizing: border-box;
-}
-
-.password-toggle {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 6px;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6b7280;
-  transition: color 0.2s;
-  width: auto;
-  height: auto;
-  line-height: 1;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+  padding: 20px;
+}
+
+/* Form Card */
+.login-form {
+  background: #ffffff;
+  padding: 48px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 10px 20px rgba(0, 0, 0, 0.06);
+  width: 100%;
+  max-width: 440px;
+  transition: box-shadow 0.3s ease;
+}
+
+.login-form:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1), 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+/* Heading */
+.login-form h2 {
+  margin: 0 0 32px 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group:last-of-type {
+  margin-bottom: 32px;
+}
+
+/* Labels */
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2c2c2c;
+  letter-spacing: 0.2px;
+}
+
+/* Input Fields */
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="text"],
+.password-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #1a1a1a;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus,
+.form-group input[type="text"]:focus,
+.password-input:focus {
+  outline: none;
+  border-color: #000000;
+  background-color: #fafafa;
+}
+
+.form-group input::placeholder {
+  color: #999999;
+}
+
+/* Password Input Wrapper */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input {
+  padding-right: 48px;
+}
+
+/* Password Toggle Button */
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666666;
+  transition: color 0.2s ease;
+  border-radius: 4px;
 }
 
 .password-toggle:hover {
-  color: #374151;
+  color: #000000;
+  background-color: #f5f5f5;
 }
 
 .password-toggle:focus {
-  outline: none;
+  outline: 2px solid #000000;
+  outline-offset: 2px;
 }
 
 .password-toggle svg {
   display: block;
+}
+
+/* Error Messages */
+.error {
+  margin-top: 6px;
+  animation: slideIn 0.2s ease;
+}
+
+.error small {
+  color: #d32f2f;
+  font-size: 13px;
+  font-weight: 500;
+  display: block;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Forgot Password Link */
+.forget-password {
+  margin-top: 8px;
+  text-align: right;
+}
+
+.forget-password a {
+  color: #1a1a1a;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.forget-password a:hover {
+  color: #000000;
+  border-bottom-color: #000000;
+}
+
+/* Turnstile Widget Container */
+#turnstile-widget {
+  display: flex;
+  justify-content: center;
+  min-height: 65px;
+  margin: 4px 0;
+}
+
+/* Login Button */
+.login-button {
+  width: 100%;
+  padding: 14px 24px;
+  background-color: #000000;
+  color: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+  margin-top: 8px;
+}
+
+.login-button:hover:not(:disabled) {
+  background-color: #1a1a1a;
+  border-color: #1a1a1a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.login-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.login-button:disabled {
+  background-color: #cccccc;
+  border-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Invalid State for Inputs */
+.form-group input.ng-invalid.ng-touched,
+.form-group input.ng-invalid.ng-dirty {
+  border-color: #d32f2f;
+}
+
+.form-group input.ng-valid.ng-touched,
+.form-group input.ng-valid.ng-dirty {
+  border-color: #2e7d32;
+}
+
+/* Hidden Autofill Trick Fields */
+input[type="text"][style*="display:none"],
+input[type="password"][style*="display:none"] {
+  position: absolute;
+  left: -9999px;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 16px;
+  }
+
+  .login-form {
+    padding: 32px 24px;
+  }
+
+  .login-form h2 {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .login-button {
+    padding: 12px 20px;
+  }
+}
+
+/* Focus Visible for Accessibility */
+*:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+}
+
+/* Smooth Transitions */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

@@ -23,7 +23,7 @@ import { CommonModule } from '@angular/common';
     }
     .loader {
       border: 8px solid #f3f3f3;
-      border-top: 8px solid #61B984;
+      border-top: 8px solid black;
       border-radius: 50%;
       width: 60px;
       height: 60px;

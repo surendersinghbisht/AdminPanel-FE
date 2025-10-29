@@ -44,6 +44,8 @@ private BaseUrl = `${BASE_URL}/EmailTemplate`
     }
 
     updateActiveStatus(data: any):Observable<any>{
+        let admin = getAdminFromLocalHost();
+        data.userName = admin.name;
         return this.http.post(`${this.BaseUrl}/update-active-status`,data)
     } 
 

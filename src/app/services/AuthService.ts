@@ -89,6 +89,8 @@ export interface User {
     }
 
     updateUserStatus(userData: any): Observable<any> {
+      let admin = getAdminFromLocalHost();
+      userData.userName = admin.name;
         console.log('userData',userData)
         return this.http.post<any>(`${this.baseUrl}/update-user-status`, userData);
     }
@@ -108,6 +110,7 @@ export interface User {
     }
 
     updateUser(userData: any): Observable<any> {
+   
         return this.http.post<any>(`${this.baseUrl}/update-user`, userData);
     }
 
@@ -136,5 +139,9 @@ export interface User {
     
 getUsersCount() {
   return this.http.get<number>(`${this.baseUrl}/count`);
+}
+
+verifyOtp(phone: string, otp: string){
+  return this.http.post<any>(`${this.baseUrl}/verify-otp`,{phone, otp});
 }
 }

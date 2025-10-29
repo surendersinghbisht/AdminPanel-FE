@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, AbstractControl, ValidationErrors, Validators } from '@angular/forms';
-import { AuthService } from '../../services/AuthService';
+import { AuthService, getAdminFromLocalHost } from '../../services/AuthService';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
@@ -253,6 +253,8 @@ private formatDateForInput(dateValue: any): string {
     formData.append('username', formValue.username);
     formData.append('role', this.user.role);
     formData.append('dob', formValue.dob);
+     const admin = getAdminFromLocalHost();
+        formData.append('AdminName', admin.name);
 
    
     if (this.selectedFile) {
@@ -424,10 +426,10 @@ private formatDateForInput(dateValue: any): string {
     this.trimFormValues();
     
     if (this.isProfileInvalid()) {
-      this.snackBar.open('Please fix all errors before updating profile', 'Close', {
+      this.snackBar.open('Please fill all required fields correctly before updating profile', 'Close', {
         duration: 3000,
         verticalPosition: 'top',
-        horizontalPosition: 'center',
+        horizontalPosition: 'right',
         panelClass: ['error-snackbar']
       });
       return;
@@ -444,11 +446,26 @@ private formatDateForInput(dateValue: any): string {
         this.snackBar.open('Profile updated successfully!', 'Close', {
           duration: 3000,
           verticalPosition: 'top',
-          horizontalPosition: 'center',
+          horizontalPosition: 'right',
           panelClass: ['success-snackbar']
         });
+
+        const updatedUser = {
+        ...this.user, // existing user data
+        name: this.userForm.get('Name')?.value,
+        email: this.userForm.get('email')?.value,
+        phone: this.userForm.get('phone')?.value?.e164Number || this.userForm.get('phone')?.value,
+        username: this.userForm.get('username')?.value,
+        filePath: this.imagePreview || this.user.filePath, // handle image update
+        dob: this.userForm.get('dob')?.value,
+      };
+
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      console.log('✅ LocalStorage updated:', updatedUser);
+
+      // Reload form data (optional but safe)
+      this.loadUserProfile();
         
-        this.loadUserProfile();
       },
       error: (error) => {
         this.isLoading = false;
@@ -457,7 +474,7 @@ private formatDateForInput(dateValue: any): string {
         this.snackBar.open(errorMessage, 'Close', {
           duration: 3000,
           verticalPosition: 'top',
-          horizontalPosition: 'center',
+          horizontalPosition: 'right',
           panelClass: ['error-snackbar']
         });
       }
@@ -473,7 +490,7 @@ private formatDateForInput(dateValue: any): string {
       this.snackBar.open('Please fill all password fields correctly', 'Close', {
         duration: 3000,
         verticalPosition: 'top',
-        horizontalPosition: 'center',
+        horizontalPosition: 'right',
         panelClass: ['error-snackbar']
       });
       return;
@@ -494,7 +511,7 @@ private formatDateForInput(dateValue: any): string {
         this.snackBar.open('Password changed successfully!', 'Close', {
           duration: 3000,
           verticalPosition: 'top',
-          horizontalPosition: 'center',
+          horizontalPosition: 'right',
           panelClass: ['success-snackbar']
         });
         this.clearPasswordFields();
@@ -506,7 +523,7 @@ private formatDateForInput(dateValue: any): string {
         this.snackBar.open(errorMessage, 'Close', {
           duration: 3000,
           verticalPosition: 'top',
-          horizontalPosition: 'center',
+          horizontalPosition: 'right',
           panelClass: ['error-snackbar']
         });
       }

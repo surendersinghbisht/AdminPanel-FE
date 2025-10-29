@@ -140,7 +140,7 @@
 
     <!-- Buttons -->
     <div class="action-buttons">
-      <button type="button" [disabled]="emailForm.invalid || isLoading" (click)="saveEmail()" class="submit-button">
+      <button type="button" [disabled]="isLoading" (click)="saveEmail()" class="submit-button">
         <span *ngIf="!isLoading">{{isEditMode ? 'Update' : 'Save'}} Template</span>
         <span *ngIf="isLoading">Saving...</span>
       </button>

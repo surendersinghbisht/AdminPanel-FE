@@ -26,6 +26,7 @@ import { DataTableComponent } from '../../Components/datatable/datatable';
 })
 export class LogsComponent implements OnInit {
   isLoading = false;
+  isAddButtonEnabled = false;
     @ViewChild(DataTableComponent) dataTable!: DataTableComponent;
 
   constructor(private emailService: EmailTemplateService,
@@ -49,9 +50,6 @@ export class LogsComponent implements OnInit {
   }
 handleExport() {
 }
-handleAdd() {
-  this.router.navigate(['/add-cms']);
-}
 
 handleActiveChange(event: {row: any, isActive: boolean}) {
 
@@ -66,7 +64,7 @@ handleEdit(row: any) {
 
 
 
- columns = [
+columns = [
   { title: 'Name', data: 'adminName' },
   { title: 'Type', data: 'type' },
   { title: 'Activity', data: 'activity' },
@@ -74,14 +72,22 @@ handleEdit(row: any) {
     title: 'Timestamp',
     data: 'timeStamp',
     render: function (data: string) {
+      if (!data) return '';
+      
       const date = new Date(data);
+      
+      if (isNaN(date.getTime())) return data;
+      
+      // Convert to IST with proper timezone
       return date.toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
         day: '2-digit',
         month: 'short',
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit'
+        second: '2-digit',
+        hour12: true
       });
     }
   }

@@ -16,7 +16,7 @@
       />
       <div>
        <p class="user-name">{{ user.name?.split(' ')[0] }}</p>
-        <p class="user-role fw-semibold" style="color: white">{{ user.role }}</p>
+        <p class="user-role fw-semibold" >{{ user.role }}</p>
       </div>
     </div>
 
@@ -60,13 +60,7 @@
   <!-- Overlay for mobile -->
   <div class="overlay" *ngIf="sidebarVisible" (click)="toggleSidebar()"></div>
 
-    <button class="hamburger" (click)="toggleSidebar()">☰</button>
-  <!-- Main content -->
-  <div class="main-content">
-    <div class="outlet">
-
-      <!-- ✅ Profile dropdown -->
-      <div class="profile-dropdown top-right" #profileDropdown>
+   <div class="profile-dropdown top-right" #profileDropdown>
         <button class="profile-btn" (click)="toggleProfileMenu()">
           <i class="fas fa-user-circle"></i>
         </button>
@@ -76,6 +70,13 @@
           <a (click)="logout()">Logout</a>
         </div>
       </div>
+    <button class="hamburger" (click)="toggleSidebar()">☰</button>
+  <!-- Main content -->
+  <div class="main-content">
+  
+    <div class="outlet">
+ 
+      
 
       <router-outlet></router-outlet>
     </div>

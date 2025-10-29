@@ -1,7 +1,7 @@
 /* Profile Container */
 .profile-container {
-  width: 95%; /* or 100% if you want it fully stretched */
-  max-width: none; /* remove the previous max-width restriction */
+  width: 95%;
+  max-width: none;
   margin: 0 auto;
   padding: 2rem;
   background: #ffffff;
@@ -10,503 +10,516 @@
 }
 
   
-  /* Profile Header */
-  .profile-header {
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 2px solid #f0f0f0;
+/* Profile Header */
+.profile-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.profile-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 0.5rem 0;
+}
+
+.profile-subtitle {
+  font-size: 1rem;
+  color: #666666;
+  margin: 0;
+}
+
+/* Form Sections */
+.form-section {
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: #f5f5f5;
+  border-radius: 8px;
+  border: 1px solid #d0d0d0;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 0.5rem 0;
+}
+
+.section-description {
+  font-size: 0.9rem;
+  color: #666666;
+  margin: 0 0 1.5rem 0;
+}
+
+/* Form Layout */
+.profile-form {
+  width: 100%;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2a2a2a;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.required {
+  color: #dc3545;
+  margin-left: 0.25rem;
+}
+
+/* Input Styles */
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #cccccc;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  background: #ffffff;
+  color: #2a2a2a;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.form-input:disabled,
+.form-input.readonly-input {
+  background-color: #f0f0f0;
+  color: #999999;
+  cursor: not-allowed;
+}
+
+.form-input::placeholder {
+  color: #aaaaaa;
+}
+
+/* Tel Input Custom Styles */
+.tel-input-custom {
+  width: 100%;
+}
+
+.tel-input-custom ::ng-deep .iti {
+  width: 100%;
+  display: block;
+}
+
+.tel-input-custom ::ng-deep .iti__flag-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0;
+  z-index: 1;
+}
+
+.tel-input-custom ::ng-deep .iti__selected-flag {
+  padding: 0 0 0 12px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  min-width: 40px;
+  background-color: transparent;
+}
+
+.tel-input-custom ::ng-deep .iti__flag {
+  margin-right: 8px;
+}
+
+.tel-input-custom ::ng-deep .iti__selected-dial-code {
+  font-size: 1rem;
+  color: #2a2a2a;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.tel-input-custom ::ng-deep input.form-input-tel {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 60px !important;
+  font-size: 1rem;
+  border: 2px solid #cccccc;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  background: #ffffff;
+  color: #2a2a2a;
+}
+
+.tel-input-custom ::ng-deep input.form-input-tel:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.tel-input-custom ::ng-deep .iti__arrow {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid #666666;
+  margin-left: 6px;
+}
+
+.tel-input-custom ::ng-deep .iti__country-list {
+  max-height: 200px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: 4px;
+  border: 1px solid #d0d0d0;
+}
+
+.tel-input-custom ::ng-deep .iti__country {
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+}
+
+.tel-input-custom ::ng-deep .iti__country:hover {
+  background-color: #f0f0f0;
+}
+
+.tel-input-custom ::ng-deep .iti__country-name {
+  margin-left: 8px;
+  font-size: 0.95rem;
+}
+
+.tel-input-custom ::ng-deep .iti__dial-code {
+  color: #666666;
+  font-size: 0.9rem;
+}
+
+.tel-input-custom ::ng-deep .iti__search-input {
+  padding: 8px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  margin: 8px;
+  width: calc(100% - 16px);
+  font-size: 0.95rem;
+}
+
+/* Error Messages */
+.error-message {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #dc3545;
+  display: flex;
+  align-items: center;
+  animation: slideDown 0.3s ease;
+}
+
+.error-message span {
+  display: flex;
+  align-items: center;
+}
+
+.error-message span::before {
+  content: "⚠";
+  margin-right: 0.5rem;
+  font-size: 1rem;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-  
-  .profile-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #1a1a1a;
-    margin: 0 0 0.5rem 0;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .profile-subtitle {
-    font-size: 1rem;
-    color: #666;
-    margin: 0;
-  }
-  
-  /* Form Sections */
-  .form-section {
-    margin-bottom: 3rem;
-    padding: 2rem;
-    background: #fafafa;
-    border-radius: 8px;
-    border: 1px solid #e5e5e5;
-  }
-  
-  .section-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #2c3e50;
-    margin: 0 0 0.5rem 0;
-  }
-  
-  .section-description {
-    font-size: 0.9rem;
-    color: #666;
-    margin: 0 0 1.5rem 0;
-  }
-  
-  /* Form Layout */
-  .profile-form {
-    width: 100%;
-  }
-  
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .form-group {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .form-label {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-  }
-  
-  .required {
-    color: #e74c3c;
-    margin-left: 0.25rem;
-  }
-  
-  /* Input Styles */
-  .form-input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    border: 2px solid #ddd;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    background: #ffffff;
-    color: #333;
-  }
-  
-  .form-input:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-  }
-  
-  .form-input:disabled,
-  .form-input.readonly-input {
-    background-color: #f5f5f5;
-    color: #999;
-    cursor: not-allowed;
-  }
-  
-  .form-input::placeholder {
-    color: #aaa;
-  }
-  
-  /* Tel Input Custom Styles */
-  .tel-input-custom {
-    width: 100%;
-  }
-  
-  .tel-input-custom ::ng-deep .iti {
-    width: 100%;
-    display: block;
-  }
-  
-  .tel-input-custom ::ng-deep .iti__flag-container {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    padding: 0;
-    z-index: 1;
-  }
-  
-  .tel-input-custom ::ng-deep .iti__selected-flag {
-    padding: 0 0 0 12px;
-    display: flex;
-    align-items: center;
-    height: 100%;
-    min-width: 40px;
-    background-color: transparent;
-  }
-  
-  .tel-input-custom ::ng-deep .iti__flag {
-    margin-right: 8px;
-  }
-  
-  .tel-input-custom ::ng-deep .iti__selected-dial-code {
-    font-size: 1rem;
-    color: #333;
-    font-weight: 500;
-    margin-left: 8px;
-  }
-  
-  .tel-input-custom ::ng-deep input.form-input-tel {
-    width: 100%;
-    padding: 0.75rem 1rem 0.75rem 60px !important;
-    font-size: 1rem;
-    border: 2px solid #ddd;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    background: #ffffff;
-    color: #333;
-  }
-  
-  .tel-input-custom ::ng-deep input.form-input-tel:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-  }
-  
-  .tel-input-custom ::ng-deep .iti__arrow {
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-top: 5px solid #666;
-    margin-left: 6px;
-  }
-  
-  .tel-input-custom ::ng-deep .iti__country-list {
-    max-height: 200px;
-    border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    margin-top: 4px;
-    border: 1px solid #ddd;
-  }
-  
-  .tel-input-custom ::ng-deep .iti__country {
-    padding: 8px 12px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .tel-input-custom ::ng-deep .iti__country:hover {
-    background-color: #f0f8ff;
-  }
-  
-  .tel-input-custom ::ng-deep .iti__country-name {
-    margin-left: 8px;
-    font-size: 0.95rem;
-  }
-  
-  .tel-input-custom ::ng-deep .iti__dial-code {
-    color: #666;
-    font-size: 0.9rem;
-  }
-  
-  .tel-input-custom ::ng-deep .iti__search-input {
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin: 8px;
-    width: calc(100% - 16px);
-    font-size: 0.95rem;
-  }
-  
-  /* Error Messages */
-  .error-message {
-    margin-top: 0.5rem;
-    font-size: 0.85rem;
-    color: #e74c3c;
-    display: flex;
-    align-items: center;
-    animation: slideDown 0.3s ease;
-  }
-  
-  .error-message span {
-    display: flex;
-    align-items: center;
-  }
-  
-  .error-message span::before {
-    content: "⚠";
-    margin-right: 0.5rem;
-    font-size: 1rem;
-  }
-  
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Image Upload Section */
-  .image-upload-section {
-    display: flex;
-    align-items: flex-start;
-    gap: 2rem;
-    padding: 1.5rem;
-    background: #ffffff;
-    border-radius: 8px;
-    border: 2px dashed #ddd;
-  }
-  
-  .image-preview-container {
-    flex-shrink: 0;
-    width: 150px;
-    height: 150px;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #f8f8f8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid #e0e0e0;
-  }
-  
-  .preview-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .preview-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #999;
-    text-align: center;
+}
+
+/* Image Upload Section */
+.image-upload-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 2px dashed #cccccc;
+}
+
+.image-preview-container {
+  flex-shrink: 0;
+  width: 150px;
+  height: 150px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f8f8f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #d0d0d0;
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #999999;
+  text-align: center;
+  padding: 1rem;
+}
+
+.preview-placeholder svg {
+  color: #cccccc;
+  margin-bottom: 0.5rem;
+}
+
+.preview-placeholder p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+/* File Input */
+.file-input-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #000000;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  font-size: 0.95rem;
+  width: fit-content;
+}
+
+.file-label:hover {
+  background: #2a2a2a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.file-label svg {
+  flex-shrink: 0;
+}
+
+.btn-remove-image {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #4a4a4a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  width: fit-content;
+}
+
+.btn-remove-image:hover {
+  background: #1a1a1a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Form Actions */
+.form-actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 2rem;
+  background: linear-gradient(135deg, #000000 0%, #2a2a2a 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2a2a2a 0%, #404040 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.btn-primary:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-primary svg {
+  flex-shrink: 0;
+}
+
+.btn-password {
+  background: linear-gradient(135deg, #404040 0%, #1a1a1a 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-password:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .profile-container {
     padding: 1rem;
   }
-  
-  .preview-placeholder svg {
-    color: #ccc;
-    margin-bottom: 0.5rem;
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
-  
-  .preview-placeholder p {
-    margin: 0;
-    font-size: 0.85rem;
-  }
-  
-  /* File Input */
-  .file-input-wrapper {
-    flex: 1;
-    display: flex;
+
+  .image-upload-section {
     flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .file-input {
-    display: none;
-  }
-  
-  .file-label {
-    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background: #3498db;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border: none;
-    font-size: 0.95rem;
-    width: fit-content;
   }
-  
-  .file-label:hover {
-    background: #2980b9;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+
+  .image-preview-container {
+    width: 120px;
+    height: 120px;
   }
-  
-  .file-label svg {
-    flex-shrink: 0;
+
+  .file-input-wrapper {
+    width: 100%;
   }
-  
+
+  .file-label,
   .btn-remove-image {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background: #e74c3c;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    font-size: 0.95rem;
-    width: fit-content;
+    width: 100%;
+    justify-content: center;
   }
-  
-  .btn-remove-image:hover {
-    background: #c0392b;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
-  }
-  
-  /* Form Actions */
+
   .form-actions {
-    margin-top: 2rem;
-    display: flex;
-    gap: 1rem;
+    flex-direction: column;
   }
-  
+
   .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.875rem 2rem;
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-    color: white;
-    border: none;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .profile-title {
+    font-size: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 0.75rem;
     border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
   }
-  
-  .btn-primary:hover:not(:disabled) {
-    background: linear-gradient(135deg, #2980b9 0%, #21618c 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(52, 152, 219, 0.4);
+
+  .form-section {
+    padding: 1rem;
   }
-  
-  .btn-primary:disabled {
-    background: #bdc3c7;
+
+  .profile-title {
+    font-size: 1.35rem;
+  }
+}
+
+/* Loading State */
+.btn-primary:disabled,
+.btn-password:disabled {
+    background: #cccccc;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
-  }
-  
-  .btn-primary svg {
-    flex-shrink: 0;
-  }
-  
-  .btn-password {
-    background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
-    box-shadow: 0 4px 12px rgba(155, 89, 182, 0.3);
-  }
-  
-  .btn-password:hover:not(:disabled) {
-    background: linear-gradient(135deg, #8e44ad 0%, #732d91 100%);
-    box-shadow: 0 6px 16px rgba(155, 89, 182, 0.4);
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .profile-container {
-      padding: 1rem;
-    }
-  
-    .form-row {
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-  
-    .image-upload-section {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .image-preview-container {
-      width: 120px;
-      height: 120px;
-    }
-  
-    .file-input-wrapper {
-      width: 100%;
-    }
-  
-    .file-label,
-    .btn-remove-image {
-      width: 100%;
-      justify-content: center;
-    }
-  
-    .form-actions {
-      flex-direction: column;
-    }
-  
-    .btn-primary {
-      width: 100%;
-      justify-content: center;
-    }
-  
-    .profile-title {
-      font-size: 1.5rem;
-    }
-  
-    .section-title {
-      font-size: 1.25rem;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .profile-container {
-      padding: 0.75rem;
-      border-radius: 8px;
-    }
-  
-    .form-section {
-      padding: 1rem;
-    }
-  
-    .profile-title {
-      font-size: 1.35rem;
-    }
-  }
-  
-  /* Loading State */
-  .btn-primary:disabled,
-  .btn-password:disabled {
-      background: #bdc3c7;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-      color: #fff; /* keep text visible */
-  }
-  
- 
-  
-  /* Input Validation States */
-  .form-input.ng-invalid.ng-touched {
-    border-color: #e74c3c;
-  }
-  
-  .form-input.ng-valid.ng-touched {
-    border-color: #27ae60;
-  }
-  
-  /* Focus within for better UX */
-  .form-group:focus-within .form-label {
-    color: #3498db;
-  }
-  
-  /* Smooth transitions */
-  * {
-    box-sizing: border-box;
-  }
-  
-  
-  input,
-  button {
-    font-family: inherit;
-  }
+    color: #fff;
+}
 
+/* Input Validation States - Error states with red */
+.form-input.ng-invalid.ng-touched {
+  border-color: #dc3545;
+  background-color: #fff5f5;
+}
 
-  .password-input-wrapper {
+.form-input.ng-invalid.ng-touched:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.form-input.ng-valid.ng-touched {
+  border-color: #4a4a4a;
+}
+
+/* Tel input error state */
+.tel-input-custom ::ng-deep input.form-input-tel.ng-invalid.ng-touched {
+  border-color: #dc3545 !important;
+  background-color: #fff5f5 !important;
+}
+
+.tel-input-custom ::ng-deep input.form-input-tel.ng-invalid.ng-touched:focus {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1) !important;
+}
+
+/* Focus within for better UX */
+.form-group:focus-within .form-label {
+  color: #000000;
+}
+
+/* Smooth transitions */
+* {
+  box-sizing: border-box;
+}
+
+input,
+button {
+  font-family: inherit;
+}
+
+.password-input-wrapper {
   position: relative;
   width: 100%;
 }
@@ -527,12 +540,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6b7280;
+  color: #6b6b6b;
   transition: color 0.2s;
 }
 
 .password-toggle:hover {
-  color: #374151;
+  color: #2a2a2a;
 }
 
 .password-toggle:focus {

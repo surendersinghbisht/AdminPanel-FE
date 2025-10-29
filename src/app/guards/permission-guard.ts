@@ -13,29 +13,46 @@ export class PermissionGuard implements CanActivate {
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    const requiredPermission = route.data['permission']; // 👈 defined in routing
-    const permissions = JSON.parse(localStorage.getItem('rolesWithPermissions') || '[]');
+    const requiredPermission = route.data['permission'];
+    const accessType = route.data['accessType'] || 'read'; // default: read
 
+    const permissions = JSON.parse(localStorage.getItem('rolesWithPermissions') || '[]');
     const perm = permissions.find((p: any) =>
       p.permissionName?.toLowerCase() === requiredPermission?.toLowerCase()
     );
 
-    if (perm && perm.canRead) {
-      return true;
+    if (!perm) {
+      this.showError(`You don't have permission to access this page.`);
+      this.router.navigate(['/dashboard']);
+      return false;
     }
 
-    this.snackBar.open(
-      `You don't have permission to access this page.`,
-      'Close',
-      {
-        duration: 4000,
-        horizontalPosition: 'end',
-          verticalPosition: 'top',
-        panelClass: ['error-snackbar'] // optional custom class
-      }
-    );
+    // ✅ Check based on accessType
+    switch (accessType.toLowerCase()) {
+      case 'create':
+        if (perm.canCreate) return true;
+        break;
+      case 'update':
+        if (perm.canUpdate) return true;
+        break;
+      case 'delete':
+        if (perm.canDelete) return true;
+        break;
+      default: // read
+        if (perm.canRead) return true;
+    }
 
+    this.showError(`You don't have access to this page.`);
     this.router.navigate(['/dashboard']);
     return false;
+  }
+
+  private showError(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 4000,
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+      panelClass: ['error-snackbar']
+    });
   }
 }

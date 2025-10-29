@@ -28,8 +28,8 @@
 }
 
 :host ::ng-deep .is-active-cell .form-check-input.active-toggle:checked {
-    background-color: #61B984 !important;
-    border-color: #61B984 !important;
+    background-color: black !important;
+    border-color: black !important;
 }
 
 :host ::ng-deep .is-active-cell .form-check-input.active-toggle::before {

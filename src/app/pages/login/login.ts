@@ -129,14 +129,15 @@ togglePasswordVisibility(): void {
 
     this.authService.login(email, password, this.turnstileToken).subscribe({
       next: (res: any) => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('user', JSON.stringify(res.admin));
-        this.snackbar.show('Login successful', 'success');
+        console.log('login',res)
+        localStorage.setItem('phone', JSON.stringify(res.phone));
         this.isLoading = false;
-        this.router.navigate(['/dashboard']);
+        if(res.success){
+          this.router.navigate(['/verify-otp']);
+        }
       },
       error: (err: any) => {
-        const errorMessage = err.error?.message || 'Login failed';
+        const errorMessage = err.error?.message || 'failed';
         this.snackbar.show(errorMessage, 'error');
         this.isLoading = false;
         this.resetTurnstile();

@@ -110,7 +110,7 @@
         <div class="form-actions">
        <button type="button" class="cancel-btn" routerLink="/roles">Cancel</button>
       
-      <button type="submit" class="submit-button" [disabled]="roleForm.invalid">
+      <button type="submit" class="submit-button" [disabled]="isLoading">
         <span *ngIf="!isLoading">{{isEditMode ? "Update Role": "Add Role"}}</span>
         <span *ngIf="isLoading">
           <span class="spinner"></span>

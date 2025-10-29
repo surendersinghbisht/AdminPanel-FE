@@ -12,6 +12,7 @@ import { Role, RoleService } from '../../services/RoleService';
 import { ActivatedRoute } from '@angular/router';
 import { AngularPhoneNumberInput } from 'angular-phone-number-input';
 import { formatDate } from '@angular/common';
+import { finalize } from 'rxjs/operators';
 
 
 function nameValidator(control: AbstractControl): ValidationErrors | null {
@@ -181,14 +182,20 @@ export class AddUserComponent implements OnInit {
     });
   }
 
-  private passwordStrengthValidator(control: AbstractControl): ValidationErrors | null {
-    const password = control.value;
-    if (!password) return null;
+private passwordStrengthValidator(control: AbstractControl): ValidationErrors | null {
+  const password = control.value;
+  if (!password) return null;
 
-    const pattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,50}$/;
+  // Must have:
+  // - At least 1 uppercase letter
+  // - At least 1 digit
+  // - At least 1 special character (@$!%*?&)
+  // - Between 8 and 50 characters
+  const pattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,50}$/;
 
-    return pattern.test(password) ? null : { weakPassword: true };
-  }
+  return pattern.test(password) ? null : { weakPassword: true };
+}
+
 
   phoneValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
@@ -345,87 +352,71 @@ export class AddUserComponent implements OnInit {
     this.showRoleDropdown = false;
   }
 
-  submitForm(): void {
-    this.markFormGroupTouched(this.userForm);
+submitForm(): void {
+  this.markFormGroupTouched(this.userForm);
 
-    if (this.userForm.invalid) {
-      this.snackBar.open('Please fill the form correctly!', 'Close', {
-        duration: 3000,
-        horizontalPosition: 'end',
-        verticalPosition: 'top',
-        panelClass: ['error-snackbar']
-      });
-      return;
-    }
-
-    const nameControl = this.userForm.get('name');
-    const usernameControl = this.userForm.get('username');
-    if (nameControl?.value) {
-      nameControl.setValue(nameControl.value.trim());
-    }
-    if (usernameControl?.value) {
-      usernameControl.setValue(usernameControl.value.trim());
-    }
-
-    this.isLoading = true;
-    const formData = this.prepareFormData();
-
-    console.log('Submitting with photoRemoved flag:', this.photoRemoved);
-
-    if (this.isEditMode && this.userId) {
-      this.authService.updateUser(formData).subscribe({
-        next: (response) => {
-          this.snackBar.open('User updated successfully!', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'end',
-            verticalPosition: 'top',
-            panelClass: ['success-snackbar']
-          });
-          
-          setTimeout(() => {
-            this.isLoading = false;
-            this.router.navigate(['/users']);
-          }, 500);
-        },
-        error: (error) => {
-          this.isLoading = false;
-          const errorMessage = error?.error?.message || 'Failed to update user. Please try again.';
-          this.snackBar.open(errorMessage, 'Close', {
-            duration: 5000,
-            horizontalPosition: 'end',
-            verticalPosition: 'top',
-            panelClass: ['error-snackbar']
-          });
-          console.error('Error updating user:', error);
-        }
-      });
-    } else {
-      console.log('Adding new user with formData:', formData);
-      this.authService.addUser(formData).subscribe({
-        next: (response) => {
-          this.isLoading = false;
-          this.snackBar.open('User added successfully!', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'end',
-            verticalPosition: 'top',
-            panelClass: ['success-snackbar']
-          });
-          this.router.navigate(['/users']);
-        },
-        error: (error) => {
-          this.isLoading = false;
-          const errorMessage = error?.error?.message || 'Failed to add user. Please try again.';
-          this.snackBar.open(errorMessage, 'Close', {
-            duration: 5000,
-            horizontalPosition: 'end',
-            verticalPosition: 'top',
-            panelClass: ['error-snackbar']
-          });
-          console.error('Error adding user:', error);
-        }
-      });
-    }
+  if (this.userForm.invalid) {
+    this.snackBar.open('Please fill the required fields correctly!', 'Close', {
+      duration: 3000,
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+      panelClass: ['error-snackbar']
+    });
+    return;
   }
+
+  const nameControl = this.userForm.get('name');
+  const usernameControl = this.userForm.get('username');
+  if (nameControl?.value) nameControl.setValue(nameControl.value.trim());
+  if (usernameControl?.value) usernameControl.setValue(usernameControl.value.trim());
+
+  this.userForm.disable();
+  this.isLoading = true;
+
+  const formData = this.prepareFormData();
+
+  const request$ = this.isEditMode && this.userId
+    ? this.authService.updateUser(formData)
+    : this.authService.addUser(formData);
+
+  request$
+    .pipe(finalize(() => {
+      // Always re-enable the form and stop loader, even on error
+      this.userForm.enable();
+      this.isLoading = false;
+    }))
+    .subscribe({
+      next: (response) => {
+        const message = this.isEditMode
+          ? 'User updated successfully!'
+          : 'User added successfully!';
+
+        this.snackBar.open(message, 'Close', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar']
+        });
+
+        this.router.navigate(['/users']);
+      },
+      error: (error) => {
+        const errorMessage = error?.error?.message || 
+          (this.isEditMode 
+            ? 'Failed to update user. Please try again.' 
+            : 'Failed to add user. Please try again.');
+
+        this.snackBar.open(errorMessage, 'Close', {
+          duration: 5000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar']
+        });
+
+        console.error('Error submitting user:', error);
+      }
+    });
+}
 
   private prepareFormData(): FormData {
     const formValue = this.userForm.value;

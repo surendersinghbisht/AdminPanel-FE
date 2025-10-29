@@ -16,7 +16,8 @@ export class ResetPassword implements OnInit {
   resetForm!: FormGroup;
   token!: string;
   isLoading = false;
-
+  showPassword = false;
+  showConfirmPassword = false;
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -32,6 +33,14 @@ export class ResetPassword implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6), this.passwordStrengthValidator]],
       confirmPassword: ['', [Validators.required]]
     }, { validators: this.passwordMatchValidator });
+  }
+
+    togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   passwordMatchValidator(form: FormGroup) {
