@@ -104,18 +104,17 @@ handleActiveChange(event: {row: any, isActive: boolean}) {
     }
   this.userService.updateUserStatus(payload).subscribe({
     next: () => {
-     this.dataTable.reloadTable(()=>{
-    this.showSnack('Status Updated Successfully', 'success');
-
-     });
-    
+     // ✅ Just show success message - checkbox is already toggled in UI
+     this.showSnack('Status Updated Successfully', 'success');
     },
-            error: (err: any) => {
-              console.error('User delete error:', err);
-              this.showSnack('Error deleting user', 'error');
-
-            }
+    error: (err: any) => {
+      console.error('User status error:', err);
+      this.showSnack('Error updating status', 'error');
+      
+      // ❌ On error, revert the checkbox back
+      this.dataTable.reloadTable();
+    }
   });
-
 }
+
 }
