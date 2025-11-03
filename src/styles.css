@@ -15,6 +15,11 @@ height: 100%;
   scroll-behavior: smooth;
 }
 
+::selection {
+  background: #000; /* your custom background color */
+  color: #fff;         /* text color inside selection */
+}
+
 body {
   min-height: 100vh;
 }

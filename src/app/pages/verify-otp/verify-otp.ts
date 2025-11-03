@@ -80,7 +80,7 @@ export class VerifyOtpComponent implements OnInit {
           }
         },
         error: (err) => {
-          this.error = err?.error?.message || 'Invalid OTP. Please try again.';
+          this.error = 'Invalid OTP. Please try again.';
         }
       });
   }
