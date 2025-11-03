@@ -29,7 +29,7 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
   @Input() loaderType: 'spinner' | 'skeleton' | 'dots' = 'spinner';
   @Input() isAddButtonEnabled = true;
 
-  @Input() permissionToAdd = true;
+  @Input() permissionToAdd = false;
   @Input() permissionToUpdate = true;
   @Input() permissionToDelete = true;
 

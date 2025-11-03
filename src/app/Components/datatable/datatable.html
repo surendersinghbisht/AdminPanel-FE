@@ -13,7 +13,7 @@
 
   <!-- Buttons aligned to right -->
   <div class="table-controls mb-3 d-flex justify-content-end gap-2 flex-wrap">
-    <button *ngIf="isAddButtonEnabled" class="cancel-btn" (click)="addAction()">
+    <button *ngIf="permissionToAdd" class="cancel-btn" (click)="addAction()">
       <i class="fas fa-plus"></i> {{ addButtonText }}
     </button>
 
