@@ -125,6 +125,13 @@ export class AddRoleComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching role:', error);
+        this.snackBar.open(error.error || 'Error fetching role', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar']
+        });
+        this.router.navigate(['/roles']);
         this.isLoading = false;
       }
     });
@@ -236,6 +243,7 @@ const data = response.filter((p: any) => p.name !== 'Faq');
         },
         error: (err) => {
           this.isLoading = false;
+          console.log(err);
           this.snackBar.open(err.error || 'Error updating role', 'Close', {
             duration: 3000,
             horizontalPosition: 'end',
@@ -262,6 +270,7 @@ const data = response.filter((p: any) => p.name !== 'Faq');
       },
       error: (err) => {
         this.isLoading = false;
+        console.log(err);
         this.snackBar.open(err.error || 'Error adding role', 'Close', {
           duration: 3000,
           horizontalPosition: 'end',

@@ -44,6 +44,8 @@ permissionToDelete = true;
     });
   }
 
+masterTemplate:string = '';
+
   ngOnInit(): void {
     const permissions =JSON.parse(localStorage.getItem('rolesWithPermissions') || '[]');
 permissions.forEach((perm: any) => {
@@ -53,7 +55,22 @@ permissions.forEach((perm: any) => {
     this.permissionToDelete = perm.canDelete;
   }
 }
-)
+);
+
+ this.templateService.getEmailTemplateById(3).subscribe({
+  next: (res: any) => {
+    this.masterTemplate = res;
+    console.log('masterTemplate', this.masterTemplate);
+    
+    // ✅ Convert object to string
+    localStorage.setItem('masterTemplate', JSON.stringify(this.masterTemplate));
+  },
+  error: (err) => {
+    console.error('Error fetching master template:', err);
+  }
+});
+
+
   }
 handleExport() {
 }

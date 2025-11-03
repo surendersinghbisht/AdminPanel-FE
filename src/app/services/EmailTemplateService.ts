@@ -57,4 +57,10 @@ private BaseUrl = `${BASE_URL}/EmailTemplate`
   console.log('roles asd',request)
     return this.http.post<DataTableResponse<any>>(`${this.BaseUrl}/get-all-logs`, request);
   }
+
+  sendResetPasswordLink(payload:any ):Observable<any> {
+    return this.http.post(`${this.BaseUrl}/send-reset-email`, payload)
   }
+    
+  }
+    

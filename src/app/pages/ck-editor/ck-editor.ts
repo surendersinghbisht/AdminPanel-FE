@@ -5,6 +5,10 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EmailTemplateService } from '../../services/EmailTemplateService';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import {
+  GeneralHtmlSupport,
+  SourceEditing
+} from 'ckeditor5';
 
 import {
   ClassicEditor,
@@ -55,6 +59,7 @@ export class CkEditor implements OnInit {
   characterCount = 0;
   editorData = '<p>Hello, world!</p>';
 templateId: string | null = null;
+masterTemplateSource: string = '';
 
   constructor(
     private snackBar: MatSnackBar,
@@ -99,6 +104,7 @@ private trimFormValues() {
   public config: any = {
     licenseKey: 'GPL',
     plugins: [
+      SourceEditing,
       Essentials,
       Paragraph,
       Bold,
@@ -124,9 +130,11 @@ private trimFormValues() {
       ImageToolbar,
       ImageInsert,
       ImageUpload,
-      AutoImage
+      AutoImage,
+      GeneralHtmlSupport 
     ],
     toolbar: [
+      'sourceEditing',
       'undo', 'redo', '|',
       'heading', '|',
       'bold', 'italic', 'underline', 'strikethrough', '|',
@@ -138,7 +146,22 @@ private trimFormValues() {
       'highlight', 'removeFormat'
     ],
     placeholder: 'Type your email content here...',
+    htmlSupport: {
+    allow: [
+      {
+        name: /.*/,
+        attributes: true,
+        classes: true,
+        styles: true
+      }
+    ]
+  }
   };
+
+private extractBodyContent(html: string): string {
+  const bodyMatch = html.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+  return bodyMatch ? bodyMatch[1].trim() : html;
+}
 
   showSnack(message: string, type: 'success' | 'error' | 'delete') {
     this.snackBar.open(message, 'Close', {
@@ -149,29 +172,29 @@ private trimFormValues() {
     });
   }
 
-  getEmailTemplateById(){
-    this.isLoading = true;
-    this.emailService.getEmailTemplateById(Number(this.templateId)).subscribe({
-      next: (response: any) => {
-        console.log('Email template fetched successfully:', response);
-        this.isLoading = false;
-        this.emailForm.patchValue(response);
-        this.editorData = response.body;
-           this.emailForm.get('key')?.disable({ onlySelf: true, emitEvent: false });
-      },
-      error: (error) => {
-        this.isLoading = false;
-        console.error('Error fetching email template:', error);
-        this.snackBar.open('Error loading email template', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          panelClass: ['error-snackbar']
-        });
-      }
-    });
-  }
-
+ getEmailTemplateById(){
+  this.isLoading = true;
+  this.emailService.getEmailTemplateById(Number(this.templateId)).subscribe({
+    next: (response: any) => {
+      console.log('Email template fetched successfully:', response);
+      this.isLoading = false;
+      this.emailForm.patchValue(response);
+      // ✅ Use body directly, no extraction needed
+      this.editorData = response.body || '<p></p>';
+      this.emailForm.get('key')?.disable({ onlySelf: true, emitEvent: false });
+    },
+    error: (error) => {
+      this.isLoading = false;
+      console.error('Error fetching email template:', error);
+      this.snackBar.open('Error loading email template', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'end',
+        verticalPosition: 'top',
+        panelClass: ['error-snackbar']
+      });
+    }
+  });
+}
   onEditorReady(editor: any) {
     this.updateWordCount();
   }

@@ -5,6 +5,10 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EmailTemplateService } from '../../services/EmailTemplateService';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import {
+
+  SourceEditing
+} from 'ckeditor5';
 
 import {
   ClassicEditor,
@@ -96,6 +100,7 @@ if(this.templateId){
   public config: any = {
     licenseKey: 'GPL',
     plugins: [
+      SourceEditing,
       Essentials,
       Paragraph,
       Bold,
@@ -124,6 +129,7 @@ if(this.templateId){
       AutoImage
     ],
     toolbar: [
+      'sourceEditing',
       'undo', 'redo', '|',
       'heading', '|',
       'bold', 'italic', 'underline', 'strikethrough', '|',

@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../../Components/loader/loader';
 import emailjs from 'emailjs-com'; // <-- import EmailJS
+import { EmailTemplateService } from '../../services/EmailTemplateService';
 
 @Component({
   selector: 'app-forget-password',
@@ -24,6 +25,7 @@ export class ForgetPassword implements OnInit {
     private router: Router,
     private snackbar: MatSnackBar,
     private fb: FormBuilder,
+    private emailTemplateService: EmailTemplateService
   ) { 
     this.forgetPasswordForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -42,52 +44,28 @@ export class ForgetPassword implements OnInit {
     // Step 1: Call backend to generate token
     this.authService.ForgetPasswordToken(email).subscribe({
       next: (token:any) => {
-        console.log('Token received:', token);
-
-        // Step 2: Send Email using EmailJS
-        const templateParams = {
-          to_email: email,
-          reset_link: `http://localhost:4200/reset-password?token=${token.token}`,
-        };
-
-        emailjs.send(
-          'service_m1az2yf',     // replace with your EmailJS service ID
-          'template_zct46bh',    // replace with your EmailJS template ID
-          templateParams,
-          'sstmWq88zisaN_7Z-'   // replace with your EmailJS public key
-        ).then(
-          (result) => {
-            console.log('Email sent successfully', result.text);
-            this.snackbar.open('Reset password email sent successfully!', 'Close', {
-              duration: 5000,
-              verticalPosition: 'top',
-              horizontalPosition: 'center',
-              panelClass: ['success-snackbar']
-            });
-            this.isLoading = false;
-          },
-          (error) => {
-            console.error('Email send failed:', error.text);
-            this.snackbar.open('Failed to send reset email', 'Close', {
-              duration: 5000,
-              verticalPosition: 'top',
-              horizontalPosition: 'center',
-              panelClass: ['error-snackbar']
-            });
-            this.isLoading = false;
-          }
-        );
+   this.emailTemplateService.sendResetPasswordLink({email:email,token:token.token}).subscribe({
+    next: () => {
+      this.snackbar.open('Reset password link sent successfully', 'Close', {
+        duration: 5000,
+        verticalPosition: 'top',
+        horizontalPosition: 'right',
+        panelClass: ['success-snackbar']
+      });
+      this.isLoading = false;
+    },
+    error: (err) => {
+      this.snackbar.open(err.error?.message || 'Reset failed', 'Close', {
+        duration: 5000,
+        verticalPosition: 'top',
+        horizontalPosition: 'right',
+        panelClass: ['error-snackbar']
+      });
+      this.isLoading = false;
+    }
+   })
       },
-      error: (err: any) => {
-        this.serverError = err.error?.message || 'Failed to generate reset token';
-        this.snackbar.open(this.serverError, 'Close', {
-          duration: 5000,
-          verticalPosition: 'top',
-          horizontalPosition: 'center',
-          panelClass: ['error-snackbar']
-        });
-        this.isLoading = false;
-      }
+  
     });
   }
 }
