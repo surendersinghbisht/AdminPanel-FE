@@ -27,7 +27,14 @@ export class PermissionGuard implements CanActivate {
       return false;
     }
 
-    // ✅ Check based on accessType
+    // 🚫 Step 1: If user can't read, deny ALL access (including create/edit/delete)
+    if (!perm.canRead) {
+      this.showError(`You don't have access to view this page.`);
+      this.router.navigate(['/dashboard']);
+      return false;
+    }
+
+    // ✅ Step 2: Check based on specific accessType
     switch (accessType.toLowerCase()) {
       case 'create':
         if (perm.canCreate) return true;
