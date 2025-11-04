@@ -29,7 +29,7 @@ export class PermissionGuard implements CanActivate {
 
     // 🚫 Step 1: If user can't read, deny ALL access (including create/edit/delete)
     if (!perm.canRead) {
-      this.showError(`You don't have access to view this page.`);
+      this.showError(`You don't have permission to access this page.`);
       this.router.navigate(['/dashboard']);
       return false;
     }
